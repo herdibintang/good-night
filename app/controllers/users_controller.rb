@@ -29,5 +29,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def unfollow
+    begin
+      user = User.find(params[:id]).unfollow(User.find(params.require(:user_id)))
+
+      render json: { message: "Unfollow success" }
+    rescue ActionController::ParameterMissing => e
+      render json: { error: e.message }, status: :bad_request
+    end
+  end
+
   private
 end

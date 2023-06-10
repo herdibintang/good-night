@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   post "/users/:id/clock-in", to: "users#clock_in"
   post "/users/:id/clock-out", to: "users#clock_out"
   post "/users/:id/follow", to: "users#follow"
+  post "/users/:id/unfollow", to: "users#unfollow"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
