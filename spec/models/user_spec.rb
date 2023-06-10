@@ -45,4 +45,15 @@ RSpec.describe User, type: :model do
     expect(user.sleeps.size).to eq(1)
     expect(user.errors.full_messages).to include("Cannot clock in if there is a clock in without clock out")
   end
+
+  it "can follow another user" do
+    user1 = User.create!
+    user2 = User.create!
+
+    user1.follow(user2)
+
+    user1.reload
+    expect(user1.followings.size).to eq(1)
+    expect(user1.followings[0].id).to eq(user2.id)
+  end
 end

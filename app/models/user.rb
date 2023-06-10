@@ -1,5 +1,7 @@
 class User < ApplicationRecord
   has_many :sleeps
+  has_many :follows, foreign_key: :from_user_id, class_name: "Follow"
+  has_many :followings, through: :follows, source: :to_user
 
   def clock_in(time)
     last_sleep = sleeps.last
@@ -21,5 +23,9 @@ class User < ApplicationRecord
     end
     
     last_sleep.update!(clock_out: time)
+  end
+
+  def follow(user)
+    followings << user
   end
 end
