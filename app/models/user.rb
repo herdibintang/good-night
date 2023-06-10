@@ -2,10 +2,17 @@ class User < ApplicationRecord
   has_many :sleeps
 
   def clock_in(time)
-    self.sleeps.create!(clock_in: time)
+    sleeps.create!(clock_in: time)
   end
 
   def clock_out(time)
-    self.sleeps.create!(clock_out: time)
+    last_sleep = sleeps.last
+    
+    if last_sleep.nil?
+      errors.add(:base, "Cannot clock out without previous clock in")
+      return
+    end
+    
+    last_sleep.update!(clock_out: time)
   end
 end
