@@ -33,4 +33,16 @@ RSpec.describe User, type: :model do
     expect(user.sleeps.last).to eq(nil)
     expect(user.errors.full_messages).to include("Cannot clock out without previous clock in")
   end
+
+  it "cannot do clock in if there is a clock in without clock out" do
+    user = User.create!
+    time = "2023-06-20 21:59:59"
+    user.sleeps.create!(clock_in: time)
+
+    user.clock_in(time)
+
+    expect(user.errors.size).not_to eq(0)
+    expect(user.sleeps.size).to eq(1)
+    expect(user.errors.full_messages).to include("Cannot clock in if there is a clock in without clock out")
+  end
 end
