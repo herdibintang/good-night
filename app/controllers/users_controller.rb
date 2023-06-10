@@ -19,5 +19,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def follow
+    begin
+      user = User.find(params[:id]).follow(User.find(params.require(:user_id)))
+
+      render json: { message: "Follow success" }
+    rescue ActionController::ParameterMissing => e
+      render json: { error: e.message }, status: :bad_request
+    end
+  end
+
   private
 end

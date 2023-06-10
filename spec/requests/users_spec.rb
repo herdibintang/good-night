@@ -84,4 +84,27 @@ RSpec.describe "/users", type: :request do
       expect(body["error"]).to eq("param is missing or the value is empty: datetime")
     end
   end
+
+  describe "POST /follow" do
+    it "can unfollow" do
+      user1 = User.create!
+      user2 = User.create!
+
+      params = {
+        user_id: user2.id
+      }
+
+      post "/users/#{user1.id}/follow",
+            params: params, as: :json
+
+      expect(response).to have_http_status(:ok)
+
+      body = JSON.parse(response.body)
+      expect(body["message"]).to eq("Follow success")
+
+      user1.reload
+      expect(user1.followings.size).to eq(1)
+      expect(user1.followings[0].id).to eq(user2.id)
+    end
+  end
 end
