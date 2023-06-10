@@ -56,4 +56,15 @@ RSpec.describe User, type: :model do
     expect(user1.followings.size).to eq(1)
     expect(user1.followings[0].id).to eq(user2.id)
   end
+
+  it "can unfollow another user" do
+    user1 = User.create!
+    user2 = User.create!
+
+    user1.follow(user2)
+    user1.unfollow(user2)
+
+    user1.reload
+    expect(user1.followings.size).to eq(0)
+  end
 end
