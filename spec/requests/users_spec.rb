@@ -135,9 +135,12 @@ RSpec.describe "/users", type: :request do
     it "can followings" do
       user1 = User.create!
       user2 = User.create!(name: "John")
+
+      last_week_clock_in = Date.today.last_week.beginning_of_week + 1.hour
+      last_week_clock_out = Date.today.last_week.beginning_of_week + 2.hour
       user2.sleeps.create!(
-        clock_in: "2023-05-20 20:00:00",
-        clock_out: "2023-05-20 21:00:00",
+        clock_in: last_week_clock_in,
+        clock_out: last_week_clock_out,
         duration_in_second: 3600
       )
       user1.follow(user2)
@@ -148,26 +151,32 @@ RSpec.describe "/users", type: :request do
 
       data = JSON.parse(response.body)["data"]
       expect(data[0]["name"]).to eq("John")
-      expect(data[0]["clock_in"]).to eq("2023-05-20 20:00:00")
-      expect(data[0]["clock_out"]).to eq("2023-05-20 21:00:00")
-      expect(data[0]["duration_in_second"]).to eq(3600)
+      expect(data[0]["clock_in"]).to eq(last_week_clock_in.strftime("%F %T"))
+      expect(data[0]["clock_out"]).to eq(last_week_clock_out.strftime("%F %T"))
+      expect(data[0]["duration_in_second"]).to eq(last_week_clock_out - last_week_clock_in)
     end
 
     it "sorted by sleep duration descending" do
       user1 = User.create!
       
       user_with_shorter_duration = User.create!(name: "John")
+
+      last_week_clock_in1 = Date.today.last_week.beginning_of_week + 30.minute
+      last_week_clock_out1 = Date.today.last_week.beginning_of_week + 1.hour
       user_with_shorter_duration.sleeps.create!(
-        clock_in: "2023-05-20 20:30:00",
-        clock_out: "2023-05-20 21:00:00",
-        duration_in_second: 1800
+        clock_in: last_week_clock_in1,
+        clock_out: last_week_clock_out1,
+        duration_in_second: (last_week_clock_out1 - last_week_clock_in1)
       )
 
       user_with_longer_duration = User.create!(name: "Bob")
+
+      last_week_clock_in2 = Date.today.last_week.beginning_of_week + 1.hour
+      last_week_clock_out2 = Date.today.last_week.beginning_of_week + 2.hour
       user_with_longer_duration.sleeps.create!(
-        clock_in: "2023-05-20 20:00:00",
-        clock_out: "2023-05-20 21:00:00",
-        duration_in_second: 3600
+        clock_in: last_week_clock_in2,
+        clock_out: last_week_clock_out2,
+        duration_in_second: (last_week_clock_out2 - last_week_clock_in2)
       )
       
       user1.follow(user_with_shorter_duration)
@@ -182,8 +191,8 @@ RSpec.describe "/users", type: :request do
       expect(data.size).to eq(2)
 
       expect(data[0]["name"]).to eq(user_with_longer_duration.name)
-      expect(data[0]["clock_in"]).to eq("2023-05-20 20:00:00")
-      expect(data[0]["clock_out"]).to eq("2023-05-20 21:00:00")
+      expect(data[0]["clock_in"]).to eq(last_week_clock_in2.strftime("%F %T"))
+      expect(data[0]["clock_out"]).to eq(last_week_clock_out2.strftime("%F %T"))
       expect(data[0]["duration_in_second"]).to eq(user_with_longer_duration.sleeps[0].duration_in_second)
     end
 
