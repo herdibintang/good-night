@@ -1,8 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  it "must have a name" do
+    user = User.new
+
+    expect(user).not_to be_valid
+  end
+
   it "can do clock in" do
-    user = User.create!
+    user = User.create!(name: "Alice")
 
     time = "2023-06-20 21:59:59"
 
@@ -12,7 +18,7 @@ RSpec.describe User, type: :model do
   end
 
   it "can do clock out" do
-    user = User.create!
+    user = User.create!(name: "Alice")
     user.clock_in("2023-06-20 20:59:59")
 
     time = "2023-06-20 21:59:59"
@@ -24,7 +30,7 @@ RSpec.describe User, type: :model do
   end
 
   it "cannot do clock out if there is no previous check in" do
-    user = User.create!
+    user = User.create!(name: "Alice")
 
     time = "2023-06-20 21:59:59"
 
@@ -36,7 +42,7 @@ RSpec.describe User, type: :model do
   end
 
   it "cannot do clock in if there is a clock in without clock out" do
-    user = User.create!
+    user = User.create!(name: "Alice")
     time = "2023-06-20 21:59:59"
     user.sleeps.create!(clock_in: time)
 
@@ -48,8 +54,8 @@ RSpec.describe User, type: :model do
   end
 
   it "can follow another user" do
-    user1 = User.create!
-    user2 = User.create!
+    user1 = User.create!(name: "Alice")
+    user2 = User.create!(name: "Bob")
 
     user1.follow(user2)
 
@@ -59,8 +65,8 @@ RSpec.describe User, type: :model do
   end
 
   it "can unfollow another user" do
-    user1 = User.create!
-    user2 = User.create!
+    user1 = User.create!(name: "Alice")
+    user2 = User.create!(name: "Bob")
 
     user1.follow(user2)
     user1.unfollow(user2)

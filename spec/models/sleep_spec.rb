@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Sleep, type: :model do
   it "automatically set duration_in_seconds when clock out is updated" do
-    user = User.new
+    user = User.new(name: "Alice")
 
     sleep = Sleep.new
     sleep.clock_in = "2023-05-20 20:00:00"

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "/users", type: :request do
   describe "POST /clock-in" do
     it "can clock in" do
-      user = User.create!
+      user = User.create!(name: "Alice")
 
       time = "2023-06-20 21:59:59"
 
@@ -37,7 +37,7 @@ RSpec.describe "/users", type: :request do
     end
 
     it "datetime empty" do
-      user = User.create!
+      user = User.create!(name: "Alice")
 
       time = "2023-06-20 21:59:59"
 
@@ -57,7 +57,7 @@ RSpec.describe "/users", type: :request do
 
   describe "POST /clock-out" do
     it "can clock out" do
-      user = User.create!
+      user = User.create!(name: "Alice")
 
       time = "2023-06-20 21:59:59"
 
@@ -80,7 +80,7 @@ RSpec.describe "/users", type: :request do
     end
 
     it "datetime empty" do
-      user = User.create!
+      user = User.create!(name: "Alice")
 
       time = "2023-06-20 21:59:59"
 
@@ -100,8 +100,8 @@ RSpec.describe "/users", type: :request do
 
   describe "POST /follow" do
     it "can follow" do
-      user1 = User.create!
-      user2 = User.create!
+      user1 = User.create!(name: "Alice")
+      user2 = User.create!(name: "Bob")
 
       params = {
         user_id: user2.id
@@ -123,8 +123,8 @@ RSpec.describe "/users", type: :request do
 
   describe "POST /unfollow" do
     it "can unfollow" do
-      user1 = User.create!
-      user2 = User.create!
+      user1 = User.create!(name: "Alice")
+      user2 = User.create!(name: "Bob")
       user1.follow(user2)
 
       params = {
@@ -146,7 +146,7 @@ RSpec.describe "/users", type: :request do
 
   describe "GET /followings/sleeps" do
     it "can followings" do
-      user1 = User.create!
+      user1 = User.create!(name: "Alice")
       user2 = User.create!(name: "John")
 
       last_week_clock_in = Date.today.last_week.beginning_of_week + 1.hour
@@ -170,7 +170,7 @@ RSpec.describe "/users", type: :request do
     end
 
     it "sorted by sleep duration descending" do
-      user1 = User.create!
+      user1 = User.create!(name: "Alice")
       
       user_with_shorter_duration = User.create!(name: "John")
 
@@ -210,7 +210,7 @@ RSpec.describe "/users", type: :request do
     end
 
     it "only get data from previous week" do
-      user1 = User.create!
+      user1 = User.create!(name: "Alice")
       
       user2 = User.create!(name: "John")
       user2.sleeps.create!(
@@ -246,7 +246,7 @@ RSpec.describe "/users", type: :request do
 
   describe "GET /sleeps" do
     it "show list of a user's sleep" do
-      user1 = User.create!
+      user1 = User.create!(name: "Alice")
       user1.sleeps.create!(
         clock_in: "2023-05-20 21:00:00",
         clock_out: "2023-05-20 21:00:00",
