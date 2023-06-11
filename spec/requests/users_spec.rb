@@ -152,5 +152,39 @@ RSpec.describe "/users", type: :request do
       expect(data[0]["clock_out"]).to eq("2023-05-20 21:00:00")
       expect(data[0]["duration_in_second"]).to eq(3600)
     end
+
+    it "sorted by sleep duration descending" do
+      user1 = User.create!
+      
+      user_with_shorter_duration = User.create!(name: "John")
+      user_with_shorter_duration.sleeps.create!(
+        clock_in: "2023-05-20 20:30:00",
+        clock_out: "2023-05-20 21:00:00",
+        duration_in_second: 1800
+      )
+
+      user_with_longer_duration = User.create!(name: "Bob")
+      user_with_longer_duration.sleeps.create!(
+        clock_in: "2023-05-20 20:00:00",
+        clock_out: "2023-05-20 21:00:00",
+        duration_in_second: 3600
+      )
+      
+      user1.follow(user_with_shorter_duration)
+      user1.follow(user_with_longer_duration)
+
+      get "/users/#{user1.id}/followings/sleeps", as: :json
+
+      expect(response).to have_http_status(:ok)
+
+      data = JSON.parse(response.body)["data"]
+      
+      expect(data.size).to eq(2)
+
+      expect(data[0]["name"]).to eq(user_with_longer_duration.name)
+      expect(data[0]["clock_in"]).to eq("2023-05-20 20:00:00")
+      expect(data[0]["clock_out"]).to eq("2023-05-20 21:00:00")
+      expect(data[0]["duration_in_second"]).to eq(user_with_longer_duration.sleeps[0].duration_in_second)
+    end
   end
 end

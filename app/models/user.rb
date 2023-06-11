@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :sleeps
   has_many :follows, foreign_key: :from_user_id, class_name: "Follow"
+  has_many :followed, foreign_key: :to_user_id, class_name: "Follow"
   has_many :followings, through: :follows, source: :to_user
 
   def clock_in(time)
