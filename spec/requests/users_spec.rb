@@ -186,5 +186,39 @@ RSpec.describe "/users", type: :request do
       expect(data[0]["clock_out"]).to eq("2023-05-20 21:00:00")
       expect(data[0]["duration_in_second"]).to eq(user_with_longer_duration.sleeps[0].duration_in_second)
     end
+
+    it "only get data from previous week" do
+      user1 = User.create!
+      
+      user2 = User.create!(name: "John")
+      user2.sleeps.create!(
+        clock_in: 2.hour.ago,
+        clock_out: 1.hour.ago,
+        duration_in_second: 2.hour.ago - 1.hour.ago
+      )
+
+      last_week_clock_in = Date.today.last_week.beginning_of_week + 1.hour
+      last_week_clock_out = Date.today.last_week.beginning_of_week + 2.hour
+      user2.sleeps.create!(
+        clock_in: last_week_clock_in,
+        clock_out: last_week_clock_out,
+        duration_in_second: last_week_clock_out - last_week_clock_in
+      )
+      
+      user1.follow(user2)
+
+      get "/users/#{user1.id}/followings/sleeps", as: :json
+
+      expect(response).to have_http_status(:ok)
+
+      data = JSON.parse(response.body)["data"]
+      
+      expect(data.size).to eq(1)
+
+      expect(data[0]["name"]).to eq(user2.name)
+      expect(data[0]["clock_in"]).to eq((last_week_clock_in).strftime("%F %T"))
+      expect(data[0]["clock_out"]).to eq((last_week_clock_out).strftime("%F %T"))
+      expect(data[0]["duration_in_second"]).to eq(last_week_clock_out - last_week_clock_in)
+    end
   end
 end

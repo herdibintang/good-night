@@ -44,6 +44,7 @@ class UsersController < ApplicationController
       data = Sleep.includes(:user)
         .joins(user: :followed)
         .where(follows: { from_user_id: params[:id] })
+        .where({ clock_in: Date.today.last_week.beginning_of_week..Date.today.last_week.at_end_of_week })
         .order(duration_in_second: :desc)
         .map { |sleep|
           {
