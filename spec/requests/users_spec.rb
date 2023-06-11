@@ -142,6 +142,23 @@ RSpec.describe "/users", type: :request do
       user1.reload
       expect(user1.followings.size).to eq(0)
     end
+
+    it "return 409 if unfollow not existing relation" do
+      user1 = User.create!(name: "Alice")
+      user2 = User.create!(name: "Bob")
+
+      params = {
+        user_id: user2.id
+      }
+
+      post "/users/#{user1.id}/unfollow",
+            params: params, as: :json
+
+      expect(response).to have_http_status(:conflict)
+
+      body = JSON.parse(response.body)
+      expect(body["error"]).to eq("Not following this user")
+    end
   end
 
   describe "GET /followings/sleeps" do

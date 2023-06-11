@@ -33,7 +33,13 @@ class UsersController < ApplicationController
 
   def unfollow
     begin
-      user = User.find(params[:id]).unfollow(User.find(params.require(:user_id)))
+      user = User.find(params[:id])
+      
+      if !user.followings.include?(User.find(params.require(:user_id)))
+        return render json: { error: "Not following this user" }, status: :conflict
+      end
+
+      user.unfollow(User.find(params.require(:user_id)))
 
       render json: { message: "Unfollow success" }
     rescue ActionController::ParameterMissing => e
