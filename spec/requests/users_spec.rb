@@ -79,6 +79,23 @@ RSpec.describe "/users", type: :request do
       expect(user.sleeps[0].clock_out).to eq(time)
     end
 
+    it "cannot clock out if less than clock in" do
+      user = User.create!(name: "Alice")
+      user.clock_in("2023-06-20 21:59:59")
+
+      params = {
+        datetime: "2023-06-05 21:59:59"
+      }
+
+      post "/users/#{user.id}/clock-out",
+            params: params, as: :json
+
+      expect(response).to have_http_status(:conflict)
+
+      body = JSON.parse(response.body)
+      expect(body["error"]).to include("Clock out cannot be less than clock in")
+    end
+
     it "datetime empty" do
       user = User.create!(name: "Alice")
 

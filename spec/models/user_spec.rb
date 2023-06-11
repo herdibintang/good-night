@@ -81,15 +81,5 @@ RSpec.describe User, type: :model do
       user1.reload
       expect(user1.followings.size).to eq(0)
     end
-
-    # it "test" do
-    #   user1 = User.create!(name: "Alice")
-    #   user2 = User.create!(name: "Bob")
-
-    #   user1.unfollow(user2)
-
-    #   user1.reload
-    #   expect(user1.followings.size).to eq(0)
-    # end
   end
 end

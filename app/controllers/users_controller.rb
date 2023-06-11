@@ -18,6 +18,8 @@ class UsersController < ApplicationController
       render json: { message: "Clock out success" }
     rescue ActionController::ParameterMissing => e
       render json: { error: e.message }, status: :bad_request
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { error: e.message }, status: :conflict
     end
   end
 
