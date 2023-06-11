@@ -28,10 +28,12 @@ RSpec.describe "/sleeps", type: :request do
       expect(data[0]["clock_in"]).to eq("2023-05-21 23:00:00")
       expect(data[0]["clock_out"]).to eq(nil)
       expect(data[0]["duration_in_second"]).to eq(nil)
+      expect(data[0]["user"]["name"]).to eq("Bob")
 
       expect(data[1]["clock_in"]).to eq("2023-05-20 20:00:00")
       expect(data[1]["clock_out"]).to eq("2023-05-20 21:00:00")
       expect(data[1]["duration_in_second"]).to eq(3600)
+      expect(data[1]["user"]["name"]).to eq("Alice")
     end
   end
 end
