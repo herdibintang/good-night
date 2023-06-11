@@ -8,6 +8,8 @@ class UsersController < ApplicationController
       render json: { error: e.message }, status: :bad_request
     rescue ActiveRecord::RecordNotFound => e
       render json: { error: e.message }, status: :not_found
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { error: e.message }, status: :conflict
     end
   end
 
@@ -18,6 +20,8 @@ class UsersController < ApplicationController
       render json: { message: "Clock out success" }
     rescue ActionController::ParameterMissing => e
       render json: { error: e.message }, status: :bad_request
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { error: e.message }, status: :not_found
     rescue ActiveRecord::RecordInvalid => e
       render json: { error: e.message }, status: :conflict
     end
@@ -32,6 +36,8 @@ class UsersController < ApplicationController
       render json: { error: e.message }, status: :bad_request
     rescue ActiveRecord::RecordNotFound => e
       render json: { error: e.message }, status: :not_found
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { error: e.message }, status: :conflict
     end
   end
 
@@ -48,6 +54,10 @@ class UsersController < ApplicationController
       render json: { message: "Unfollow success" }
     rescue ActionController::ParameterMissing => e
       render json: { error: e.message }, status: :bad_request
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { error: e.message }, status: :not_found
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { error: e.message }, status: :conflict
     end
   end
 
@@ -70,6 +80,10 @@ class UsersController < ApplicationController
       render json: { data: data }
     rescue ActionController::ParameterMissing => e
       render json: { error: e.message }, status: :bad_request
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { error: e.message }, status: :not_found
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { error: e.message }, status: :conflict
     end
   end
 
@@ -90,6 +104,10 @@ class UsersController < ApplicationController
       render json: { data: data }
     rescue ActionController::ParameterMissing => e
       render json: { error: e.message }, status: :bad_request
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { error: e.message }, status: :not_found
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { error: e.message }, status: :conflict
     end
   end
 

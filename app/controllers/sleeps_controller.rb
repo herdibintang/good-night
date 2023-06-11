@@ -12,5 +12,11 @@ class SleepsController < ApplicationController
     }
 
     render json: { data: data }
+  rescue ActionController::ParameterMissing => e
+    render json: { error: e.message }, status: :bad_request
+  rescue ActiveRecord::RecordNotFound => e
+    render json: { error: e.message }, status: :not_found
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { error: e.message }, status: :conflict
   end
 end
