@@ -61,5 +61,25 @@ class UsersController < ApplicationController
     end
   end
 
+  def sleeps
+    begin
+      data = User.includes(:sleeps)
+        .find(params[:id])
+        .sleeps
+        .order(created_at: :desc)
+        .map { |sleep|
+          {
+            clock_in: sleep.clock_in.strftime("%F %T"),
+            clock_out: sleep.clock_out.try(:strftime, "%F %T"),
+            duration_in_second: sleep.duration_in_second
+          }
+        }
+
+      render json: { data: data }
+    rescue ActionController::ParameterMissing => e
+      render json: { error: e.message }, status: :bad_request
+    end
+  end
+
   private
 end
