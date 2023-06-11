@@ -23,6 +23,19 @@ RSpec.describe "/users", type: :request do
       expect(user.sleeps[0].clock_in).to eq(time)
     end
 
+    it "return 404 if user not found" do
+      time = "2023-06-20 21:59:59"
+
+      params = {
+        datetime: time
+      }
+
+      post "/users/999999/clock-in",
+            params: params, as: :json
+
+      expect(response).to have_http_status(:not_found)
+    end
+
     it "datetime empty" do
       user = User.create!
 
