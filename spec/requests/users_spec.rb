@@ -130,4 +130,27 @@ RSpec.describe "/users", type: :request do
       expect(user1.followings.size).to eq(0)
     end
   end
+
+  describe "GET /followings/sleeps" do
+    it "can followings" do
+      user1 = User.create!
+      user2 = User.create!(name: "John")
+      user2.sleeps.create!(
+        clock_in: "2023-05-20 20:00:00",
+        clock_out: "2023-05-20 21:00:00",
+        duration_in_second: 3600
+      )
+      user1.follow(user2)
+
+      get "/users/#{user1.id}/followings/sleeps", as: :json
+
+      expect(response).to have_http_status(:ok)
+
+      data = JSON.parse(response.body)["data"]
+      expect(data[0]["name"]).to eq("John")
+      expect(data[0]["clock_in"]).to eq("2023-05-20 20:00:00")
+      expect(data[0]["clock_out"]).to eq("2023-05-20 21:00:00")
+      expect(data[0]["duration_in_second"]).to eq(3600)
+    end
+  end
 end

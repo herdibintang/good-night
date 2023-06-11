@@ -39,5 +39,24 @@ class UsersController < ApplicationController
     end
   end
 
+  def followings_sleeps
+    begin
+      data = User.find(params[:id]).followings.flat_map { |following|
+        following.sleeps.map { |sleep|
+          {
+            name: following.name,
+            clock_in: sleep.clock_in.strftime("%F %T"),
+            clock_out: sleep.clock_out.strftime("%F %T"),
+            duration_in_second: sleep.duration_in_second
+          }
+        }
+      }
+
+      render json: { data: data }
+    rescue ActionController::ParameterMissing => e
+      render json: { error: e.message }, status: :bad_request
+    end
+  end
+
   private
 end
