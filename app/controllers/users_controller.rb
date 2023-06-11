@@ -30,6 +30,8 @@ class UsersController < ApplicationController
       render json: { message: "Follow success" }
     rescue ActionController::ParameterMissing => e
       render json: { error: e.message }, status: :bad_request
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { error: e.message }, status: :not_found
     end
   end
 
