@@ -1,14 +1,13 @@
 Rails.application.routes.draw do
-  resources :sleeps
-  resources :users
-  post "/users/:id/clock-in", to: "users#clock_in"
-  post "/users/:id/clock-out", to: "users#clock_out"
-  post "/users/:id/follow", to: "users#follow"
-  post "/users/:id/unfollow", to: "users#unfollow"
-  get "/users/:id/followings/sleeps", to: "users#followings_sleeps"
-  get "/users/:id/sleeps", to: "users#sleeps"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  resources :sleeps, only: [:index]
+  resources :users do
+    member do
+      post :clock_in, path: "clock-in"
+      post :clock_out, path: "clock-out"
+      post :follow, path: "follow"
+      post :unfollow, path: "unfollow"
+      get :sleeps, path: "sleeps"
+      get "followings/sleeps", to: "users#followings_sleeps"
+    end
+  end
 end
