@@ -84,10 +84,12 @@ class UsersController < ApplicationController
         .order(duration_in_second: :desc)
         .map { |sleep|
           {
-            name: sleep.user.name,
             clock_in: sleep.clock_in.strftime("%F %T"),
             clock_out: sleep.clock_out.strftime("%F %T"),
-            duration_in_second: sleep.duration_in_second
+            duration_in_second: sleep.duration_in_second,
+            user: {
+              name: sleep.user.name
+            }
           }
         }
 

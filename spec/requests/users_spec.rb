@@ -242,10 +242,10 @@ RSpec.describe "/users", type: :request do
       expect(response).to have_http_status(:ok)
 
       data = JSON.parse(response.body)["data"]
-      expect(data[0]["name"]).to eq("John")
       expect(data[0]["clock_in"]).to eq(last_week_clock_in.strftime("%F %T"))
       expect(data[0]["clock_out"]).to eq(last_week_clock_out.strftime("%F %T"))
       expect(data[0]["duration_in_second"]).to eq(last_week_clock_out - last_week_clock_in)
+      expect(data[0]["user"]["name"]).to eq("John")
     end
 
     it "sorted by sleep duration descending" do
