@@ -241,7 +241,7 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "GET /followings/sleeps" do
-    it "can followings" do
+    it "can get followings' sleeps" do
       user1 = User.create!(name: "Alice")
       user2 = User.create!(name: "John")
 
@@ -393,7 +393,7 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "GET /followings" do
-    it "can followings" do
+    it "show user's followings" do
       user1 = User.create!(name: "Alice")
       user2 = User.create!(name: "John")
 
