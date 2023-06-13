@@ -296,7 +296,7 @@ RSpec.describe "/users", type: :request do
       expect(response).to have_http_status(:ok)
 
       data = JSON.parse(response.body)["data"]
-      
+
       expect(data.size).to eq(2)
 
       expect(data[0]["clock_in"]).to eq(last_week_clock_in2.strftime("%F %T"))
@@ -337,6 +337,27 @@ RSpec.describe "/users", type: :request do
       expect(data[0]["clock_out"]).to eq((last_week_clock_out).strftime("%F %T"))
       expect(data[0]["duration_in_second"]).to eq(last_week_clock_out - last_week_clock_in)
       expect(data[0]["user"]["name"]).to eq(user2.name)
+    end
+
+    it "show sleep without clockout" do
+      user1 = User.create!(name: "Alice")
+      user2 = User.create!(name: "John")
+
+      last_week_clock_in = Date.today.last_week.beginning_of_week + 1.hour
+      user2.sleeps.create!(
+        clock_in: last_week_clock_in
+      )
+      user1.follow(user2)
+
+      get "/users/#{user1.id}/followings/sleeps", as: :json
+
+      expect(response).to have_http_status(:ok)
+
+      data = JSON.parse(response.body)["data"]
+      expect(data[0]["clock_in"]).to eq(last_week_clock_in.strftime("%F %T"))
+      expect(data[0]["clock_out"]).to eq(nil)
+      expect(data[0]["duration_in_second"]).to eq(nil)
+      expect(data[0]["user"]["name"]).to eq("John")
     end
   end
 
