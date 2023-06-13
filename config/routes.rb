@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       post :follow
       post :unfollow
       get :sleeps
+      get :followings
       get "followings/sleeps", to: "users#followings_sleeps"
     end
   end

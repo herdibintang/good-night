@@ -125,5 +125,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def followings
+    data = User.find(params[:id]).followings
+
+    render json: { data: data }
+  end
+
   private
 end
