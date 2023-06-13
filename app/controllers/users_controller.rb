@@ -1,4 +1,18 @@
 class UsersController < ApplicationController
+  def create
+    user = User.create!(name: params.require(:name))
+
+    render json: {
+      message: "Create user success",
+      data: {
+        id: user.id,
+        name: user.name
+      }
+    }
+  rescue ActionController::ParameterMissing => e
+    render json: { error: e.message }, status: :bad_request
+  end
+
   def clock_in
     begin
       user = User.find(params[:id]).clock_in(params.require(:datetime))
