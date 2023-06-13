@@ -45,6 +45,8 @@ RSpec.describe "/users", type: :request do
       
       expect(body["data"][0]["id"]).not_to eq(nil)
       expect(body["data"][0]["name"]).to eq("Alice")
+      expect(body["data"][0]["created_at"]).to eq(nil)
+      expect(body["data"][0]["updated_at"]).to eq(nil)
     end
   end
 
@@ -297,10 +299,10 @@ RSpec.describe "/users", type: :request do
       
       expect(data.size).to eq(2)
 
-      expect(data[0]["name"]).to eq(user_with_longer_duration.name)
       expect(data[0]["clock_in"]).to eq(last_week_clock_in2.strftime("%F %T"))
       expect(data[0]["clock_out"]).to eq(last_week_clock_out2.strftime("%F %T"))
       expect(data[0]["duration_in_second"]).to eq(user_with_longer_duration.sleeps[0].duration_in_second)
+      expect(data[0]["user"]["name"]).to eq(user_with_longer_duration.name)
     end
 
     it "only get data from previous week" do
@@ -331,10 +333,10 @@ RSpec.describe "/users", type: :request do
       
       expect(data.size).to eq(1)
 
-      expect(data[0]["name"]).to eq(user2.name)
       expect(data[0]["clock_in"]).to eq((last_week_clock_in).strftime("%F %T"))
       expect(data[0]["clock_out"]).to eq((last_week_clock_out).strftime("%F %T"))
       expect(data[0]["duration_in_second"]).to eq(last_week_clock_out - last_week_clock_in)
+      expect(data[0]["user"]["name"]).to eq(user2.name)
     end
   end
 
