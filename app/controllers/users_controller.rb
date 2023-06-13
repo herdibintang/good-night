@@ -139,7 +139,12 @@ class UsersController < ApplicationController
   end
 
   def followings
-    data = User.find(params[:id]).followings
+    data = User.find(params[:id]).followings.map { |following|
+      {
+        id: following.id,
+        name: following.name
+      }
+    }
 
     render json: { data: data }
   end

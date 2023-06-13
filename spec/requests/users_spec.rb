@@ -405,6 +405,8 @@ RSpec.describe "/users", type: :request do
 
       data = JSON.parse(response.body)["data"]
       expect(data[0]["name"]).to eq("John")
+      expect(data[0]["created_at"]).to eq(nil)
+      expect(data[0]["updated_at"]).to eq(nil)
     end
   end
 end
