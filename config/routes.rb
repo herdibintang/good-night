@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :sleeps, only: [:index]
-  resources :users, only:[:create] do
+  resources :users, only:[:create, :index] do
     member do
       post :clock_in, path: "clock-in"
       post :clock_out, path: "clock-out"

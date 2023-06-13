@@ -13,6 +13,12 @@ class UsersController < ApplicationController
     render json: { error: e.message }, status: :bad_request
   end
 
+  def index
+    data = User.all
+
+    render json: { data: data }
+  end
+
   def clock_in
     begin
       user = User.find(params[:id]).clock_in(params.require(:datetime))

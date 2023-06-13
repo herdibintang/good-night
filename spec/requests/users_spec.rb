@@ -33,6 +33,21 @@ RSpec.describe "/users", type: :request do
     end
   end
 
+  describe "POST /index" do
+    it "show user list" do
+      User.create!(name: "Alice")
+
+      get "/users", as: :json
+
+      expect(response).to have_http_status(:ok)
+
+      body = JSON.parse(response.body)
+      
+      expect(body["data"][0]["id"]).not_to eq(nil)
+      expect(body["data"][0]["name"]).to eq("Alice")
+    end
+  end
+
   describe "POST /clock-in" do
     it "can clock in" do
       user = User.create!(name: "Alice")
