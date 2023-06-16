@@ -9,8 +9,6 @@ class UsersController < ApplicationController
         name: user.name
       }
     }
-  rescue ActionController::ParameterMissing => e
-    render json: { error: e.message }, status: :bad_request
   end
 
   def index
@@ -28,36 +26,18 @@ class UsersController < ApplicationController
     user = User.find(params[:id]).clock_in(params.require(:datetime))
 
     render json: { message: "Clock in success" }
-  rescue ActionController::ParameterMissing => e
-    render json: { error: e.message }, status: :bad_request
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
-  rescue ActiveRecord::RecordInvalid => e
-    render json: { error: e.message }, status: :conflict
   end
 
   def clock_out
     user = User.find(params[:id]).clock_out(params.require(:datetime))
 
     render json: { message: "Clock out success" }
-  rescue ActionController::ParameterMissing => e
-    render json: { error: e.message }, status: :bad_request
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
-  rescue ActiveRecord::RecordInvalid => e
-    render json: { error: e.message }, status: :conflict
   end
 
   def follow
     user = User.find(params[:id]).follow(User.find(params.require(:user_id)))
 
     render json: { message: "Follow success" }
-  rescue ActionController::ParameterMissing => e
-    render json: { error: e.message }, status: :bad_request
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
-  rescue ActiveRecord::RecordInvalid => e
-    render json: { error: e.message }, status: :conflict
   end
 
   def unfollow
@@ -70,12 +50,6 @@ class UsersController < ApplicationController
     user.unfollow(User.find(params.require(:user_id)))
 
     render json: { message: "Unfollow success" }
-  rescue ActionController::ParameterMissing => e
-    render json: { error: e.message }, status: :bad_request
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
-  rescue ActiveRecord::RecordInvalid => e
-    render json: { error: e.message }, status: :conflict
   end
 
   def followings_sleeps
@@ -96,12 +70,6 @@ class UsersController < ApplicationController
       }
 
     render json: { data: data }
-  rescue ActionController::ParameterMissing => e
-    render json: { error: e.message }, status: :bad_request
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
-  rescue ActiveRecord::RecordInvalid => e
-    render json: { error: e.message }, status: :conflict
   end
 
   def sleeps
@@ -118,12 +86,6 @@ class UsersController < ApplicationController
       }
 
     render json: { data: data }
-  rescue ActionController::ParameterMissing => e
-    render json: { error: e.message }, status: :bad_request
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
-  rescue ActiveRecord::RecordInvalid => e
-    render json: { error: e.message }, status: :conflict
   end
 
   def followings
