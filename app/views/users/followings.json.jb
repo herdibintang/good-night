@@ -1,0 +1,8 @@
+{
+  data: @followings.map { |following|
+    {
+      id: following.id,
+      name: following.name
+    }
+  }
+}
