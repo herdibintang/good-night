@@ -1,0 +1,7 @@
+{
+  message: "Create user success",
+  data: {
+    id: @user.id,
+    name: @user.name
+  }
+}

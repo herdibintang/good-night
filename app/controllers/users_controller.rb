@@ -1,14 +1,6 @@
 class UsersController < ApplicationController
   def create
-    user = User.create!(name: params.require(:name))
-
-    render json: {
-      message: "Create user success",
-      data: {
-        id: user.id,
-        name: user.name
-      }
-    }
+    @user = User.create!(name: params.require(:name))
   end
 
   def index
