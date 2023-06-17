@@ -3,6 +3,8 @@ class Sleep < ApplicationRecord
 
   belongs_to :user
 
+  scope :last_week, -> { where({ clock_in: Date.today.last_week.beginning_of_week..Date.today.last_week.at_end_of_week }) }
+
   def clock_out=(value)
     super(value)
 

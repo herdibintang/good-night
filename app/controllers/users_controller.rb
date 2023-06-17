@@ -38,10 +38,10 @@ class UsersController < ApplicationController
   end
 
   def followings_sleeps
-    @sleeps = Sleep.includes(:user)
+    @sleeps = Sleep.last_week
+      .includes(:user)
       .joins(user: :followed)
       .where(follows: { from_user_id: params[:id] })
-      .where({ clock_in: Date.today.last_week.beginning_of_week..Date.today.last_week.at_end_of_week })
       .order(duration_in_second: :desc)
   end
 
