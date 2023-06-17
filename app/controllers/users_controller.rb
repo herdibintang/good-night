@@ -4,14 +4,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    data = User.all.map { |user|
-      {
-        id: user.id,
-        name: user.name
-      }
-    }
-
-    render json: { data: data }
+    @users = User.all
   end
 
   def clock_in
