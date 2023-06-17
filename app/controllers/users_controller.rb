@@ -53,23 +53,11 @@ class UsersController < ApplicationController
   end
 
   def followings_sleeps
-    data = Sleep.includes(:user)
+    @sleeps = Sleep.includes(:user)
       .joins(user: :followed)
       .where(follows: { from_user_id: params[:id] })
       .where({ clock_in: Date.today.last_week.beginning_of_week..Date.today.last_week.at_end_of_week })
       .order(duration_in_second: :desc)
-      .map { |sleep|
-        {
-          clock_in: sleep.clock_in.strftime("%F %T"),
-          clock_out: sleep.clock_out.try(:strftime, "%F %T"),
-          duration_in_second: sleep.duration_in_second,
-          user: {
-            name: sleep.user.name
-          }
-        }
-      }
-
-    render json: { data: data }
   end
 
   def sleeps
