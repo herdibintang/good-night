@@ -73,8 +73,7 @@ class UsersController < ApplicationController
   end
 
   def sleeps
-    data = User.includes(:sleeps)
-      .find(params[:id])
+    data = User.find(params[:id])
       .sleeps
       .order(created_at: :desc)
       .map { |sleep|
