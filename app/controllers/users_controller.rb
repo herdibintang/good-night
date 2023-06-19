@@ -14,7 +14,10 @@ class UsersController < ApplicationController
   end
 
   def clock_out
-    user = User.find(params[:id]).clock_out(params.require(:datetime))
+    UserEndSleepUseCase.call(
+      user_id: params[:id],
+      datetime: params.require(:datetime)
+    )
 
     render json: { message: "Clock out success" }
   end
