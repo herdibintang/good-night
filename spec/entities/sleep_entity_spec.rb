@@ -14,7 +14,7 @@ describe SleepEntity do
   it 'can end' do
     datetime = "2023-06-20 21:00:00"
 
-    sleep_entity = SleepEntity.new
+    sleep_entity = SleepEntity.new(start_at: "2023-06-20 20:00:00")
     sleep_entity.end_at = datetime
     
     expect(sleep_entity.end_at).to eq(datetime)
@@ -26,5 +26,14 @@ describe SleepEntity do
     sleep_entity = SleepEntity.new(start_at: datetime)
     
     expect(sleep_entity.ongoing?).to eq(true)
+  end
+
+  it 'is not ongoing if it has ended' do
+    datetime = "2023-06-20 21:00:00"
+
+    sleep_entity = SleepEntity.new(start_at: "2023-06-20 20:00:00")
+    sleep_entity.end_at = datetime
+    
+    expect(sleep_entity.ongoing?).to eq(false)
   end
 end
