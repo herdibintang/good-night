@@ -7,4 +7,16 @@ describe UserEntity do
     
     expect(user.sleeps[0].start_at).to eq("2023-06-20 21:00:00")
   end
+
+  it 'can end sleep' do
+    datetime_start = "2023-06-20 21:00:00"
+    datetime_end = "2023-06-20 22:00:00"
+
+    user = UserEntity.new
+    user.start_sleep(datetime_start)
+    user.end_sleep(datetime_end)
+    
+    expect(user.sleeps[0].start_at).to eq(datetime_start)
+    expect(user.sleeps[0].end_at).to eq(datetime_end)
+  end
 end
