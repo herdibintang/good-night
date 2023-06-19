@@ -19,4 +19,12 @@ describe SleepEntity do
     
     expect(sleep_entity.end_at).to eq(datetime)
   end
+
+  it 'is ongoing if it does not end yet' do
+    datetime = "2023-06-20 21:00:00"
+
+    sleep_entity = SleepEntity.new(start_at: datetime)
+    
+    expect(sleep_entity.ongoing?).to eq(true)
+  end
 end
