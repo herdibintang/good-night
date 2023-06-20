@@ -3,6 +3,8 @@ class UserEntity
 
   attr_accessor :sleeps
 
+  validate :sleeps_valid
+
   def initialize
     @sleeps = []
   end
@@ -14,5 +16,12 @@ class UserEntity
   def end_sleep(datetime)
     sleep = @sleeps.find { |h| h.ongoing? }
     sleep.end_at = datetime
+  end
+
+  private
+  def sleeps_valid
+    if @sleeps.any? { |sleep| !sleep.valid? }
+      errors.add(:sleeps, "invalid")
+    end
   end
 end

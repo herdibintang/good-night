@@ -16,6 +16,10 @@ class UserEndSleepUseCase
     
     user_entity.end_sleep(context.datetime)
 
+    unless user_entity.valid?
+      context.fail!
+    end
+
     user_entity.sleeps.each do |sleep|
       if sleep.changed?
         Sleep.find(sleep.id).update!(clock_out: sleep.end_at)
