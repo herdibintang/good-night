@@ -14,12 +14,16 @@ class UsersController < ApplicationController
   end
 
   def clock_out
-    UserEndSleepUseCase.call(
+    result = UserEndSleepUseCase.call(
       user_id: params[:id],
       datetime: params.require(:datetime)
     )
 
-    render json: { message: "Clock out success" }
+    if result.success?
+      render json: { message: "Clock out success" }
+    else
+      render json: { error: result.error }, status: :unprocessable_entity
+    end
   end
 
   def follow

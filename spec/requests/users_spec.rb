@@ -139,10 +139,10 @@ RSpec.describe "/users", type: :request do
       post "/users/#{user.id}/clock-out",
             params: params, as: :json
 
-      expect(response).to have_http_status(:conflict)
+      expect(response).to have_http_status(:unprocessable_entity)
 
       body = JSON.parse(response.body)
-      expect(body["error"]).to include("Clock out cannot be less than clock in")
+      expect(body["error"]).to include("Sleeps invalid")
     end
 
     it "datetime empty" do

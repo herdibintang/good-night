@@ -17,7 +17,7 @@ class UserEndSleepUseCase
     user_entity.end_sleep(context.datetime)
 
     unless user_entity.valid?
-      context.fail!
+      context.fail!(error: user_entity.errors.full_messages.to_sentence)
     end
 
     user_entity.sleeps.each do |sleep|
