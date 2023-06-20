@@ -1,6 +1,4 @@
 require 'rails_helper'
-# require_relative '../app/entities/user_entity'
-# require_relative '../app/entities/sleep_entity'
 
 describe SleepEntity do
   it 'can start' do
@@ -35,5 +33,15 @@ describe SleepEntity do
     sleep_entity.end_at = datetime
     
     expect(sleep_entity.ongoing?).to eq(false)
+  end
+
+  it 'cannot have end_at that before start_at' do
+    datetime = "2023-06-10 21:00:00"
+
+    sleep_entity = SleepEntity.new(start_at: "2023-06-20 20:00:00")
+    sleep_entity.end_at = datetime
+    
+    expect(sleep_entity.valid?).to eq(false)
+    expect(sleep_entity.errors.full_messages).to include("End at cannot be before start at")
   end
 end
