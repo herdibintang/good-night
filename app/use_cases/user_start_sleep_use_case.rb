@@ -5,6 +5,8 @@ class UserStartSleepUseCase
 
   def call
     user_entity = UserEntity.new
+
+    User.find(context.user_id)
     
     Sleep.where(user_id: context.user_id).all.each do |sleep|
       sleep_entity = SleepEntity.new

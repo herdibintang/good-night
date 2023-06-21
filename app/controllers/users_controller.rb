@@ -8,9 +8,16 @@ class UsersController < ApplicationController
   end
 
   def clock_in
-    user = User.find(params[:id]).clock_in(params.require(:datetime))
+    result = UserStartSleepUseCase.call(
+      user_id: params[:id],
+      datetime: params.require(:datetime)
+    )
 
-    render json: { message: "Clock in success" }
+    if result.success?
+      render json: { message: "Clock in success" }
+    else
+      render json: { error: result.error }, status: :unprocessable_entity
+    end
   end
 
   def clock_out
