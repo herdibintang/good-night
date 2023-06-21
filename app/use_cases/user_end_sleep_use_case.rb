@@ -7,8 +7,9 @@ class UserEndSleepUseCase
     user_entity = UserEntity.new
     
     Sleep.where(user_id: context.user_id).all.each do |sleep|
-      sleep_entity = SleepEntity.new(start_at: sleep.clock_in)
+      sleep_entity = SleepEntity.new
       sleep_entity.id = sleep.id
+      sleep_entity.start_at = sleep.clock_in
       sleep_entity.end_at = sleep.clock_out
       
       user_entity.sleeps << sleep_entity

@@ -19,4 +19,13 @@ describe UserEntity do
     expect(user.sleeps[0].start_at).to eq(datetime_start)
     expect(user.sleeps[0].end_at).to eq(datetime_end)
   end
+
+  it 'cannot end sleep if there is no ongoing sleep' do
+    datetime = "2023-06-20 22:00:00"
+
+    user = UserEntity.new
+    user.end_sleep(datetime)
+    
+    expect(user.valid?).to eq(false)
+  end
 end

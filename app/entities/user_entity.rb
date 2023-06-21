@@ -10,12 +10,23 @@ class UserEntity
   end
 
   def start_sleep(datetime)
-    @sleeps << SleepEntity.new(start_at: datetime)
+    sleep_entity = SleepEntity.new
+    sleep_entity.start_at = datetime
+
+    @sleeps << sleep_entity
   end
 
   def end_sleep(datetime)
     sleep = @sleeps.find { |h| h.ongoing? }
-    sleep.end_at = datetime
+
+    if sleep.nil?
+      sleep = SleepEntity.new
+      sleep.end_at = datetime
+
+      @sleeps << sleep
+    else
+      sleep.end_at = datetime
+    end
   end
 
   private
