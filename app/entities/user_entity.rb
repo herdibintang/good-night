@@ -1,12 +1,13 @@
 class UserEntity
   include ActiveModel::Validations
 
-  attr_accessor :sleeps
+  attr_accessor :sleeps, :followings
 
   validate :sleeps_valid
 
   def initialize
     @sleeps = []
+    @followings = []
   end
 
   def start_sleep(datetime)
@@ -27,6 +28,10 @@ class UserEntity
     else
       sleep.end_at = datetime
     end
+  end
+
+  def follow(user)
+    @followings << user
   end
 
   private

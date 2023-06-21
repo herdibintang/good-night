@@ -28,4 +28,13 @@ describe UserEntity do
     
     expect(user.valid?).to eq(false)
   end
+
+  it 'can follow another user' do
+    user1 = UserEntity.new
+    user2 = UserEntity.new
+
+    user1.follow(user2)
+    
+    expect(user1.followings[0]).to equal(user2)
+  end
 end
