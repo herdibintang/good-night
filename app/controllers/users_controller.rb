@@ -43,13 +43,14 @@ class UsersController < ApplicationController
   end
 
   def unfollow
-    user = User.find(params[:id])
-    
-    if !user.followings.include?(User.find(params.require(:user_id)))
+    result = UserUnfollowAnotherUserUseCase.call(
+      user_id: params[:id],
+      unfollow_user_id: params.require(:user_id)
+    )
+
+    if result.failure?
       return render json: { error: "Not following this user" }, status: :conflict
     end
-
-    user.unfollow(User.find(params.require(:user_id)))
 
     render json: { message: "Unfollow success" }
   end
