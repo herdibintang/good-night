@@ -1,6 +1,6 @@
 require "interactor"
 
-class ViewUsersUseCase
+class CreateUserUseCase
   include Interactor
 
   def call
