@@ -5,12 +5,11 @@ class UserEndSleepUseCase
 
   def call
     user_entity = UserEntity.new
-    
-    Sleep.where(user_id: context.user_id).all.each do |sleep|
+    SleepGateway.find_all_by_user_id(context.user_id).each do |sleep|
       sleep_entity = SleepEntity.new
-      sleep_entity.id = sleep.id
-      sleep_entity.start_at = sleep.clock_in
-      sleep_entity.end_at = sleep.clock_out
+      sleep_entity.id = sleep[:id]
+      sleep_entity.start_at = sleep[:start_at]
+      sleep_entity.end_at = sleep[:end_at]
       
       user_entity.sleeps << sleep_entity
     end
