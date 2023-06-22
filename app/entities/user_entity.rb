@@ -1,7 +1,7 @@
 class UserEntity
   include ActiveModel::Validations
 
-  attr_accessor :sleeps, :followings
+  attr_accessor :id, :sleeps, :followings
 
   validate :sleeps_valid
 
