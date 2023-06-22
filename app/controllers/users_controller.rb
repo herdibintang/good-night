@@ -34,7 +34,10 @@ class UsersController < ApplicationController
   end
 
   def follow
-    user = User.find(params[:id]).follow(User.find(params.require(:user_id)))
+    result = UserFollowAnotherUserUseCase.call(
+      user_id: params[:id],
+      follow_user_id: params.require(:user_id)
+    )
 
     render json: { message: "Follow success" }
   end

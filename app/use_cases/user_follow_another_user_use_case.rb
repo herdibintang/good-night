@@ -4,6 +4,8 @@ class UserFollowAnotherUserUseCase
   include Interactor
 
   def call
+    User.find(context.follow_user_id)
+
     user_entity = UserEntity.new
     user_entity.id = context.user_id
 
