@@ -72,7 +72,11 @@ class UsersController < ApplicationController
   end
 
   def followings
-    @followings = User.find(params[:id]).followings
+    result = UserViewFollowingsUseCase.call(
+      user_id: params[:id]
+    )
+
+    @followings = result.followings
   end
 
   private
