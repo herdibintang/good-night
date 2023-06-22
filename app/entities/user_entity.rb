@@ -34,6 +34,10 @@ class UserEntity
     @followings << user
   end
 
+  def unfollow(user)
+    @followings.delete(user)
+  end
+
   private
   def sleeps_valid
     if @sleeps.any? { |sleep| !sleep.valid? }
