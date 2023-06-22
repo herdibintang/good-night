@@ -6,8 +6,6 @@ class UsersController < ApplicationController
   end
 
   def index
-    # @users = User.all
-
     result = ViewUsersUseCase.call()
 
     @users = result.users
