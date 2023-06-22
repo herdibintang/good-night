@@ -6,7 +6,11 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.all
+    # @users = User.all
+
+    result = ViewUsersUseCase.call()
+
+    @users = result.users
   end
 
   def clock_in
