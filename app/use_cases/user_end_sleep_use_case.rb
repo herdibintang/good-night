@@ -5,6 +5,7 @@ class UserEndSleepUseCase
 
   def call
     user_entity = UserEntity.new
+    
     SleepGateway.find_all_by_user_id(context.user_id).each do |sleep|
       sleep_entity = SleepEntity.new
       sleep_entity.id = sleep[:id]

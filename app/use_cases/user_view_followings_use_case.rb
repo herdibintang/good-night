@@ -4,6 +4,6 @@ class UserViewFollowingsUseCase
   include Interactor
 
   def call
-    context.followings = User.find(context.user_id).followings
+    context.followings = UserGateway.find_followings_by_user_id(context.user_id)
   end
 end
