@@ -56,11 +56,11 @@ class UsersController < ApplicationController
   end
 
   def followings_sleeps
-    @sleeps = Sleep.last_week
-      .includes(:user)
-      .joins(user: :followed)
-      .where(follows: { from_user_id: params[:id] })
-      .order(duration_in_second: :desc)
+    result = UserViewFollowingsSleepsUseCase.call(
+      user_id: params[:id]
+    )
+
+    @sleeps = result.sleeps
   end
 
   def sleeps
