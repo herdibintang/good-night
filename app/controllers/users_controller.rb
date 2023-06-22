@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   def create
-    @user = User.create!(name: params.require(:name))
+    result = ViewUsersUseCase.call(name: params.require(:name))
+
+    @user = result.user
   end
 
   def index
