@@ -19,6 +19,8 @@ class UsersController < ApplicationController
 
     if result.success?
       render json: { message: "Clock in success" }
+    elsif result.error[:code] == :not_found
+      render json: { error: result.error[:message] }, status: :not_found
     else
       render json: { error: result.error }, status: :unprocessable_entity
     end
