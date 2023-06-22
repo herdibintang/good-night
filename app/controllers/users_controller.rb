@@ -64,9 +64,11 @@ class UsersController < ApplicationController
   end
 
   def sleeps
-    @sleeps = User.find(params[:id])
-      .sleeps
-      .order(created_at: :desc)
+    result = UserViewSleepsUseCase.call(
+      user_id: params[:id]
+    )
+
+    @sleeps = result.sleeps
   end
 
   def followings
