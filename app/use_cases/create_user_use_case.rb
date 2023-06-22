@@ -4,6 +4,6 @@ class CreateUserUseCase
   include Interactor
 
   def call
-    context.user = User.create!(name: context.name)
+    context.user = UserGateway.create(name: context.name)
   end
 end

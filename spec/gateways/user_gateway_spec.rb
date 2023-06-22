@@ -14,4 +14,10 @@ describe UserGateway do
     
     expect(user).to eq(nil)
   end
+
+  it 'return nil if user not found' do
+    user = UserGateway.create(name: "Alice")
+    
+    expect(user[:name]).to eq("Alice")
+  end
 end
