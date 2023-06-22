@@ -54,5 +54,12 @@ describe UserEntity do
       
       expect(user1.followings).to eq([])
     end
+
+    it 'cannot unfollow another user that is not in followings' do
+      user1 = UserEntity.new
+      user2 = UserEntity.new
+
+      expect(user1.unfollow(user2)).to eq(false)
+    end
   end
 end

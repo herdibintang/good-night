@@ -1,7 +1,7 @@
 class UserEntity
   include ActiveModel::Validations
 
-  attr_accessor :id, :sleeps, :followings
+  attr_accessor :id, :name, :sleeps, :followings
 
   validate :sleeps_valid
 
@@ -35,7 +35,13 @@ class UserEntity
   end
 
   def unfollow(user)
-    @followings.delete(user)
+    unless @followings.any? { |f| f.id == user.id }
+      return false
+    end
+
+    @followings.delete_if { |a| a.id == user.id }
+
+    true
   end
 
   private
