@@ -10,7 +10,7 @@ class User < ApplicationRecord
     last_sleep = sleeps.last
     
     if last_sleep.present? && last_sleep.end_at.nil?
-      errors.add(:base, "Cannot clock in if there is a clock in without clock out")
+      errors.add(:base, "Cannot start sleep if there is a start sleep without end sleep")
       return
     end
 
@@ -21,7 +21,7 @@ class User < ApplicationRecord
     last_sleep = sleeps.last
     
     if last_sleep.nil?
-      errors.add(:base, "Cannot clock out without previous clock in")
+      errors.add(:base, "Cannot end sleep without previous start sleep")
       return
     end
     

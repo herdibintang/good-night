@@ -17,7 +17,7 @@ class Sleep < ApplicationRecord
 
   def end_at_cannot_be_less_then_start_at
     if end_at.present? && end_at < start_at
-      errors.add(:end_at, "cannot be less than clock in")
+      errors.add(:end_at, "cannot be less than start_at")
     end
   end
 

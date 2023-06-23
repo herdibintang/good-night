@@ -141,7 +141,7 @@ RSpec.describe "/users", type: :request do
       expect(user.sleeps[0].end_at).to eq(datetime_end)
     end
 
-    it "cannot clock out if less than clock in" do
+    it "cannot end sleep if less than start sleep" do
       user = User.create!(name: "Alice")
       user.start_sleep("2023-06-20 21:59:59")
 
@@ -155,7 +155,7 @@ RSpec.describe "/users", type: :request do
       expect(response).to have_http_status(:conflict)
 
       body = JSON.parse(response.body)
-      expect(body["error"]).to include("End at cannot be less than clock in")
+      expect(body["error"]).to include("End at cannot be less than start sleep")
     end
 
     it "datetime empty" do
@@ -354,7 +354,7 @@ RSpec.describe "/users", type: :request do
       expect(data[0]["user"]["name"]).to eq(user2.name)
     end
 
-    it "show sleep without clockout" do
+    it "show sleep without end sleep" do
       user1 = User.create!(name: "Alice")
       user2 = User.create!(name: "John")
 
