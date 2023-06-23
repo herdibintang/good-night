@@ -11,10 +11,10 @@ class UsersController < ApplicationController
     @sleep = User.find(params[:id]).clock_in(params.require(:datetime))
   end
 
-  def clock_out
+  def sleeps_end
     user = User.find(params[:id]).clock_out(params.require(:datetime))
 
-    render json: { message: "Clock out success" }
+    render json: { message: "End sleep success" }
   end
 
   def follow
