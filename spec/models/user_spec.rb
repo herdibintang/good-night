@@ -38,7 +38,7 @@ RSpec.describe User, type: :model do
 
       time = "2023-06-20 21:59:59"
 
-      user.clock_out(time)
+      user.end_sleep(time)
 
       expect(user.sleeps[0].clock_out.strftime("%F %T")).to eq(time)
       expect(user.sleeps[0].duration_in_second).to eq(3600)
@@ -49,7 +49,7 @@ RSpec.describe User, type: :model do
 
       time = "2023-06-20 21:59:59"
 
-      user.clock_out(time)
+      user.end_sleep(time)
 
       expect(user.errors.size).not_to eq(0)
       expect(user.sleeps.last).to eq(nil)

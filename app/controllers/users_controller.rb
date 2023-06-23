@@ -13,7 +13,7 @@ class UsersController < ApplicationController
 
   def sleeps_end
     user = User.find(params[:id])
-    user.clock_out(params.require(:datetime))
+    user.end_sleep(params.require(:datetime))
 
     @sleep = user.sleeps.last
   end

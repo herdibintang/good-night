@@ -17,7 +17,7 @@ class User < ApplicationRecord
     sleeps.create!(clock_in: time)
   end
 
-  def clock_out(time)
+  def end_sleep(time)
     last_sleep = sleeps.last
     
     if last_sleep.nil?
