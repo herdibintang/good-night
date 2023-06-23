@@ -30,8 +30,6 @@ class UsersController < ApplicationController
     end
 
     user.unfollow(User.find(params.require(:user_id)))
-
-    render json: { message: "Unfollow success" }
   end
 
   def followings_sleeps
