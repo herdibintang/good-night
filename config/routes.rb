@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :sleeps, only: [:index]
   resources :users, only:[:create, :index] do
     member do
-      post :clock_in, path: "clock-in"
+      post "sleeps/start", to: "users#sleeps_start"
       post :clock_out, path: "clock-out"
       post :follow
       post :unfollow

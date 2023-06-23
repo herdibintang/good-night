@@ -50,8 +50,8 @@ RSpec.describe "/users", type: :request do
     end
   end
 
-  describe "POST /clock-in" do
-    it "can clock in" do
+  describe "POST /sleeps/start" do
+    it "can start sleep" do
       user = User.create!(name: "Alice")
 
       time = "2023-06-20 21:59:59"
@@ -60,13 +60,13 @@ RSpec.describe "/users", type: :request do
         datetime: time
       }
 
-      post "/users/#{user.id}/clock-in",
+      post "/users/#{user.id}/sleeps/start",
             params: params, as: :json
 
       expect(response).to have_http_status(:ok)
 
       body = JSON.parse(response.body)
-      expect(body["message"]).to eq("Clock in success")
+      expect(body["message"]).to eq("Start sleep success")
 
       user.reload
       expect(user.sleeps[0].clock_in).to eq(time)
@@ -79,7 +79,7 @@ RSpec.describe "/users", type: :request do
         datetime: time
       }
 
-      post "/users/999999/clock-in",
+      post "/users/999999/sleeps/start",
             params: params, as: :json
 
       expect(response).to have_http_status(:not_found)
@@ -94,7 +94,7 @@ RSpec.describe "/users", type: :request do
         datetime: ""
       }
 
-      post "/users/#{user.id}/clock-in",
+      post "/users/#{user.id}/sleeps/start",
             params: params, as: :json
 
       expect(response).to have_http_status(:bad_request)
