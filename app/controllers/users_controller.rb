@@ -8,9 +8,7 @@ class UsersController < ApplicationController
   end
 
   def sleeps_start
-    user = User.find(params[:id]).clock_in(params.require(:datetime))
-
-    render json: { message: "Start sleep success" }
+    @sleep = User.find(params[:id]).clock_in(params.require(:datetime))
   end
 
   def clock_out

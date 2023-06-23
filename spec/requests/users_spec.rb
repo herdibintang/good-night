@@ -68,6 +68,12 @@ RSpec.describe "/users", type: :request do
       body = JSON.parse(response.body)
       expect(body["message"]).to eq("Start sleep success")
 
+      data = body["data"]
+      expect(data["id"]).not_to eq(nil)
+      expect(data["start_at"]).to eq(time)
+      expect(data["end_at"]).to eq(nil)
+      expect(data["duration_in_second"]).to eq(nil)
+
       user.reload
       expect(user.sleeps[0].clock_in).to eq(time)
     end
