@@ -111,15 +111,16 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "POST /sleeps/end" do
-    it "can End sleep" do
+    it "can end sleep" do
       user = User.create!(name: "Alice")
 
-      time = "2023-06-20 21:59:59"
+      datetime_start = "2023-06-20 20:00:00"
+      datetime_end = "2023-06-20 21:00:00"
 
-      user.clock_in(time)
+      user.clock_in(datetime_start)
 
       params = {
-        datetime: time
+        datetime: datetime_end
       }
 
       post "/users/#{user.id}/sleeps/end",
@@ -130,8 +131,14 @@ RSpec.describe "/users", type: :request do
       body = JSON.parse(response.body)
       expect(body["message"]).to eq("End sleep success")
 
+      data = body["data"]
+      expect(data["id"]).not_to eq(nil)
+      expect(data["start_at"]).to eq(datetime_start)
+      expect(data["end_at"]).to eq(datetime_end)
+      expect(data["duration_in_second"]).to eq(3600)
+
       user.reload
-      expect(user.sleeps[0].clock_out).to eq(time)
+      expect(user.sleeps[0].clock_out).to eq(datetime_end)
     end
 
     it "cannot clock out if less than clock in" do

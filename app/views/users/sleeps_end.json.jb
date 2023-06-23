@@ -1,0 +1,9 @@
+{
+  message: "End sleep success",
+  data: {
+    id: @sleep.id,
+    start_at: @sleep.clock_in.strftime("%F %T"),
+    end_at: @sleep.clock_out.strftime("%F %T"),
+    duration_in_second: @sleep.duration_in_second
+  }
+}
