@@ -2,7 +2,7 @@
   message: "Start sleep success",
   data: {
     id: @sleep.id,
-    start_at: @sleep.clock_in.strftime("%F %T"),
+    start_at: @sleep.start_at.strftime("%F %T"),
     end_at: nil,
     duration_in_second: nil
   }

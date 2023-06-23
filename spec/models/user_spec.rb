@@ -15,13 +15,13 @@ RSpec.describe User, type: :model do
 
       user.start_sleep(time)
 
-      expect(user.sleeps[0].clock_in.strftime("%F %T")).to eq(time)
+      expect(user.sleeps[0].start_at.strftime("%F %T")).to eq(time)
     end
 
     it "cannot start sleep if there is a clock in without clock out" do
       user = User.create!(name: "Alice")
       time = "2023-06-20 21:59:59"
-      user.sleeps.create!(clock_in: time)
+      user.sleeps.create!(start_at: time)
   
       user.start_sleep(time)
   
@@ -40,7 +40,7 @@ RSpec.describe User, type: :model do
 
       user.end_sleep(time)
 
-      expect(user.sleeps[0].clock_out.strftime("%F %T")).to eq(time)
+      expect(user.sleeps[0].end_at.strftime("%F %T")).to eq(time)
       expect(user.sleeps[0].duration_in_second).to eq(3600)
     end
 

@@ -9,12 +9,12 @@ class User < ApplicationRecord
   def start_sleep(time)
     last_sleep = sleeps.last
     
-    if last_sleep.present? && last_sleep.clock_out.nil?
+    if last_sleep.present? && last_sleep.end_at.nil?
       errors.add(:base, "Cannot clock in if there is a clock in without clock out")
       return
     end
 
-    sleeps.create!(clock_in: time)
+    sleeps.create!(start_at: time)
   end
 
   def end_sleep(time)
@@ -25,7 +25,7 @@ class User < ApplicationRecord
       return
     end
     
-    last_sleep.update!(clock_out: time)
+    last_sleep.update!(end_at: time)
   end
 
   def follow(user)
