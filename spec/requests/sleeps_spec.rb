@@ -25,11 +25,13 @@ RSpec.describe "/sleeps", type: :request do
       
       data = JSON.parse(response.body)["data"]
       
+      expect(data[0]["id"]).not_to eq(nil)
       expect(data[0]["start_at"]).to eq("2023-05-21 23:00:00")
       expect(data[0]["end_at"]).to eq(nil)
       expect(data[0]["duration_in_second"]).to eq(nil)
       expect(data[0]["user"]["name"]).to eq("Bob")
 
+      expect(data[1]["id"]).not_to eq(nil)
       expect(data[1]["start_at"]).to eq("2023-05-20 20:00:00")
       expect(data[1]["end_at"]).to eq("2023-05-20 21:00:00")
       expect(data[1]["duration_in_second"]).to eq(3600)
