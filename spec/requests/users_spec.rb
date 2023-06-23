@@ -117,7 +117,7 @@ RSpec.describe "/users", type: :request do
       datetime_start = "2023-06-20 20:00:00"
       datetime_end = "2023-06-20 21:00:00"
 
-      user.clock_in(datetime_start)
+      user.start_sleep(datetime_start)
 
       params = {
         datetime: datetime_end
@@ -143,7 +143,7 @@ RSpec.describe "/users", type: :request do
 
     it "cannot clock out if less than clock in" do
       user = User.create!(name: "Alice")
-      user.clock_in("2023-06-20 21:59:59")
+      user.start_sleep("2023-06-20 21:59:59")
 
       params = {
         datetime: "2023-06-05 21:59:59"

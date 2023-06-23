@@ -6,7 +6,7 @@ class User < ApplicationRecord
   has_many :followed, foreign_key: :to_user_id, class_name: "Follow"
   has_many :followings, through: :follows, source: :to_user
 
-  def clock_in(time)
+  def start_sleep(time)
     last_sleep = sleeps.last
     
     if last_sleep.present? && last_sleep.clock_out.nil?

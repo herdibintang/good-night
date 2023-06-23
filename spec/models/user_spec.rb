@@ -7,23 +7,23 @@ RSpec.describe User, type: :model do
     expect(user).not_to be_valid
   end
 
-  context "clock in" do
-    it "can do clock in" do
+  context "start sleep" do
+    it "can start sleep" do
       user = User.create!(name: "Alice")
 
       time = "2023-06-20 21:59:59"
 
-      user.clock_in(time)
+      user.start_sleep(time)
 
       expect(user.sleeps[0].clock_in.strftime("%F %T")).to eq(time)
     end
 
-    it "cannot do clock in if there is a clock in without clock out" do
+    it "cannot start sleep if there is a clock in without clock out" do
       user = User.create!(name: "Alice")
       time = "2023-06-20 21:59:59"
       user.sleeps.create!(clock_in: time)
   
-      user.clock_in(time)
+      user.start_sleep(time)
   
       expect(user.errors.size).not_to eq(0)
       expect(user.sleeps.size).to eq(1)
@@ -34,7 +34,7 @@ RSpec.describe User, type: :model do
   context "clock out" do
     it "can do clock out" do
       user = User.create!(name: "Alice")
-      user.clock_in("2023-06-20 20:59:59")
+      user.start_sleep("2023-06-20 20:59:59")
 
       time = "2023-06-20 21:59:59"
 

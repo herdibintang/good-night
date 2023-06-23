@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   end
 
   def sleeps_start
-    @sleep = User.find(params[:id]).clock_in(params.require(:datetime))
+    @sleep = User.find(params[:id]).start_sleep(params.require(:datetime))
   end
 
   def sleeps_end
