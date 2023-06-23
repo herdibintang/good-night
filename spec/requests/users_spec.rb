@@ -272,9 +272,11 @@ RSpec.describe "/users", type: :request do
       expect(response).to have_http_status(:ok)
 
       data = JSON.parse(response.body)["data"]
+      expect(data[0]["id"]).not_to eq(nil)
       expect(data[0]["start_at"]).to eq(last_week_start_at.strftime("%F %T"))
       expect(data[0]["end_at"]).to eq(last_week_end_at.strftime("%F %T"))
       expect(data[0]["duration_in_second"]).to eq(last_week_end_at - last_week_start_at)
+      expect(data[0]["user"]["id"]).not_to eq(nil)
       expect(data[0]["user"]["name"]).to eq("John")
     end
 
