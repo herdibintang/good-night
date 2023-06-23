@@ -22,8 +22,8 @@ Good Night is a sleep tracker. Created for interview purpose.
 | --- | --- | --- |
 | POST | /users | To create a user |
 | GET | /users | To get list of all users |
-| POST | /users/:userId/clock-in | To clock in sleep for a user |
-| POST | /users/:userId/clock-out | To clock out sleep for a user |
+| POST | /users/:userId/sleeps/start | To clock in sleep for a user |
+| POST | /users/:userId/sleeps/end | To clock out sleep for a user |
 | GET | /users/:userId/sleeps | To list all user's sleeps |
 | POST | /users/:userId/follow | To follow a user |
 | POST | /users/:userId/unfollow | To unfollow a user |
@@ -64,8 +64,8 @@ Example response:
 }
 ```
 
-### User Clock In
-```POST /users/:userId/clock-in```
+### User Start Sleep
+```POST /users/:userId/sleeps/start```
 Example request:
 ```json
 {
@@ -75,12 +75,18 @@ Example request:
 Example response:
 ```json
 {
-    "message": "Clock in success"
+    "message":"Start sleep success",
+    "data":{
+        "id":1,
+        "start_at":"2023-06-20 21:59:59",
+        "end_at":null,
+        "duration_in_second":null
+    }
 }
 ```
 
-### User Clock Out
-```POST /users/:userId/clock-out```
+### User End Sleep
+```POST /users/:userId/sleeps/end```
 Example request:
 ```json
 {
@@ -90,7 +96,13 @@ Example request:
 Example response:
 ```json
 {
-    "message": "Clock out success"
+    "message":"End sleep success",
+    "data":{
+        "id":1,
+        "start_at":"2023-06-20 20:00:00",
+        "end_at":"2023-06-20 21:00:00",
+        "duration_in_second":3600
+    }
 }
 ```
 
