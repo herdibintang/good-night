@@ -19,9 +19,7 @@ class UsersController < ApplicationController
   end
 
   def follow
-    user = User.find(params[:id]).follow(User.find(params.require(:user_id)))
-
-    render json: { message: "Follow success" }
+    User.find(params[:id]).follow(User.find(params.require(:user_id)))
   end
 
   def unfollow
