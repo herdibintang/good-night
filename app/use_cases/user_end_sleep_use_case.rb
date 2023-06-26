@@ -21,10 +21,16 @@ class UserEndSleepUseCase
       context.fail!(error: user_entity.errors.full_messages.to_sentence)
     end
 
+    test = nil
+
     user_entity.sleeps.each do |sleep|
       if sleep.changed?
-        Sleep.find(sleep.id).update!(clock_out: sleep.end_at)
+        test = Sleep.find(sleep.id)
+        test2 = test
+        test2.update!(end_at: sleep.end_at)
       end
     end
+
+    context.sleep = test
   end
 end

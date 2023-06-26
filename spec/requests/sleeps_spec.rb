@@ -5,16 +5,16 @@ RSpec.describe "/sleeps", type: :request do
     it "can show all sleeps data" do
       user1 = User.create!(name: "Alice")
       user1.sleeps.create!(
-        clock_in: "2023-05-20 20:00:00",
-        clock_out: "2023-05-20 21:00:00",
+        start_at: "2023-05-20 20:00:00",
+        end_at: "2023-05-20 21:00:00",
         duration_in_second: 3600,
         created_at: 2.hour.ago
       )
 
       user2 = User.create!(name: "Bob")
       user2.sleeps.create!(
-        clock_in: "2023-05-21 23:00:00",
-        clock_out: nil,
+        start_at: "2023-05-21 23:00:00",
+        end_at: nil,
         duration_in_second: nil,
         created_at: 1.hour.ago
       )
@@ -25,13 +25,15 @@ RSpec.describe "/sleeps", type: :request do
       
       data = JSON.parse(response.body)["data"]
       
-      expect(data[0]["clock_in"]).to eq("2023-05-21 23:00:00")
-      expect(data[0]["clock_out"]).to eq(nil)
+      expect(data[0]["id"]).not_to eq(nil)
+      expect(data[0]["start_at"]).to eq("2023-05-21 23:00:00")
+      expect(data[0]["end_at"]).to eq(nil)
       expect(data[0]["duration_in_second"]).to eq(nil)
       expect(data[0]["user"]["name"]).to eq("Bob")
 
-      expect(data[1]["clock_in"]).to eq("2023-05-20 20:00:00")
-      expect(data[1]["clock_out"]).to eq("2023-05-20 21:00:00")
+      expect(data[1]["id"]).not_to eq(nil)
+      expect(data[1]["start_at"]).to eq("2023-05-20 20:00:00")
+      expect(data[1]["end_at"]).to eq("2023-05-20 21:00:00")
       expect(data[1]["duration_in_second"]).to eq(3600)
       expect(data[1]["user"]["name"]).to eq("Alice")
     end

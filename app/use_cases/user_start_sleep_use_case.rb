@@ -29,10 +29,14 @@ class UserStartSleepUseCase
       context.fail!(error: user_entity.errors.full_messages.to_sentence)
     end
 
+    test = nil
+
     user_entity.sleeps.each do |sleep|
       if sleep.changed?
-        Sleep.create!(user_id: context.user_id, clock_in: sleep.start_at)
+        test = Sleep.create!(user_id: context.user_id, start_at: sleep.start_at)
       end
     end
+
+    context.sleep = test
   end
 end

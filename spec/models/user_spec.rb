@@ -7,53 +7,53 @@ RSpec.describe User, type: :model do
     expect(user).not_to be_valid
   end
 
-  context "clock in" do
-    it "can do clock in" do
+  context "start sleep" do
+    it "can start sleep" do
       user = User.create!(name: "Alice")
 
       time = "2023-06-20 21:59:59"
 
-      user.clock_in(time)
+      user.start_sleep(time)
 
-      expect(user.sleeps[0].clock_in.strftime("%F %T")).to eq(time)
+      expect(user.sleeps[0].start_at.strftime("%F %T")).to eq(time)
     end
 
-    it "cannot do clock in if there is a clock in without clock out" do
+    it "cannot start sleep if there is a start sleep without end sleep" do
       user = User.create!(name: "Alice")
       time = "2023-06-20 21:59:59"
-      user.sleeps.create!(clock_in: time)
+      user.sleeps.create!(start_at: time)
   
-      user.clock_in(time)
+      user.start_sleep(time)
   
       expect(user.errors.size).not_to eq(0)
       expect(user.sleeps.size).to eq(1)
-      expect(user.errors.full_messages).to include("Cannot clock in if there is a clock in without clock out")
+      expect(user.errors.full_messages).to include("Cannot start sleep if there is a start sleep without end sleep")
     end
   end
 
-  context "clock out" do
-    it "can do clock out" do
+  context "end sleep" do
+    it "can do end sleep" do
       user = User.create!(name: "Alice")
-      user.clock_in("2023-06-20 20:59:59")
+      user.start_sleep("2023-06-20 20:59:59")
 
       time = "2023-06-20 21:59:59"
 
-      user.clock_out(time)
+      user.end_sleep(time)
 
-      expect(user.sleeps[0].clock_out.strftime("%F %T")).to eq(time)
+      expect(user.sleeps[0].end_at.strftime("%F %T")).to eq(time)
       expect(user.sleeps[0].duration_in_second).to eq(3600)
     end
 
-    it "cannot do clock out if there is no previous check in" do
+    it "cannot do end sleep if there is no previous check in" do
       user = User.create!(name: "Alice")
 
       time = "2023-06-20 21:59:59"
 
-      user.clock_out(time)
+      user.end_sleep(time)
 
       expect(user.errors.size).not_to eq(0)
       expect(user.sleeps.last).to eq(nil)
-      expect(user.errors.full_messages).to include("Cannot clock out without previous clock in")
+      expect(user.errors.full_messages).to include("Cannot end sleep without previous start sleep")
     end
   end
   

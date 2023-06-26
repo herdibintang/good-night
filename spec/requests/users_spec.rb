@@ -50,8 +50,8 @@ RSpec.describe "/users", type: :request do
     end
   end
 
-  describe "POST /clock-in" do
-    it "can clock in" do
+  describe "POST /sleeps/start" do
+    it "can start sleep" do
       user = User.create!(name: "Alice")
 
       time = "2023-06-20 21:59:59"
@@ -60,16 +60,22 @@ RSpec.describe "/users", type: :request do
         datetime: time
       }
 
-      post "/users/#{user.id}/clock-in",
+      post "/users/#{user.id}/sleeps/start",
             params: params, as: :json
 
       expect(response).to have_http_status(:ok)
 
       body = JSON.parse(response.body)
-      expect(body["message"]).to eq("Clock in success")
+      expect(body["message"]).to eq("Start sleep success")
+
+      data = body["data"]
+      expect(data["id"]).not_to eq(nil)
+      expect(data["start_at"]).to eq(time)
+      expect(data["end_at"]).to eq(nil)
+      expect(data["duration_in_second"]).to eq(nil)
 
       user.reload
-      expect(user.sleeps[0].clock_in).to eq(time)
+      expect(user.sleeps[0].start_at).to eq(time)
     end
 
     it "return 404 if user not found" do
@@ -79,7 +85,7 @@ RSpec.describe "/users", type: :request do
         datetime: time
       }
 
-      post "/users/999999/clock-in",
+      post "/users/999999/sleeps/start",
             params: params, as: :json
 
       expect(response).to have_http_status(:not_found)
@@ -94,7 +100,7 @@ RSpec.describe "/users", type: :request do
         datetime: ""
       }
 
-      post "/users/#{user.id}/clock-in",
+      post "/users/#{user.id}/sleeps/start",
             params: params, as: :json
 
       expect(response).to have_http_status(:bad_request)
@@ -104,39 +110,46 @@ RSpec.describe "/users", type: :request do
     end
   end
 
-  describe "POST /clock-out" do
-    it "can clock out" do
+  describe "POST /sleeps/end" do
+    it "can end sleep" do
       user = User.create!(name: "Alice")
 
-      time = "2023-06-20 21:59:59"
+      datetime_start = "2023-06-20 20:00:00"
+      datetime_end = "2023-06-20 21:00:00"
 
-      user.clock_in(time)
+      user.start_sleep(datetime_start)
 
       params = {
-        datetime: time
+        datetime: datetime_end
       }
 
-      post "/users/#{user.id}/clock-out",
+      post "/users/#{user.id}/sleeps/end",
             params: params, as: :json
 
       expect(response).to have_http_status(:ok)
 
       body = JSON.parse(response.body)
-      expect(body["message"]).to eq("Clock out success")
+      expect(body["message"]).to eq("End sleep success")
+
+      data = body["data"]
+      expect(data["id"]).not_to eq(nil)
+      expect(data["start_at"]).to eq(datetime_start)
+      expect(data["end_at"]).to eq(datetime_end)
+      expect(data["duration_in_second"]).to eq(3600)
 
       user.reload
-      expect(user.sleeps[0].clock_out).to eq(time)
+      expect(user.sleeps[0].end_at).to eq(datetime_end)
     end
 
-    it "cannot clock out if less than clock in" do
+    it "cannot end sleep if less than start sleep" do
       user = User.create!(name: "Alice")
-      user.clock_in("2023-06-20 21:59:59")
+      user.start_sleep("2023-06-20 21:59:59")
 
       params = {
         datetime: "2023-06-05 21:59:59"
       }
 
-      post "/users/#{user.id}/clock-out",
+      post "/users/#{user.id}/sleeps/end",
             params: params, as: :json
 
       expect(response).to have_http_status(:unprocessable_entity)
@@ -154,7 +167,7 @@ RSpec.describe "/users", type: :request do
         datetime: ""
       }
 
-      post "/users/#{user.id}/clock-out",
+      post "/users/#{user.id}/sleeps/end",
             params: params, as: :json
 
       expect(response).to have_http_status(:bad_request)
@@ -245,11 +258,11 @@ RSpec.describe "/users", type: :request do
       user1 = User.create!(name: "Alice")
       user2 = User.create!(name: "John")
 
-      last_week_clock_in = Date.today.last_week.beginning_of_week + 1.hour
-      last_week_clock_out = Date.today.last_week.beginning_of_week + 2.hour
+      last_week_start_at = Date.today.last_week.beginning_of_week + 1.hour
+      last_week_end_at = Date.today.last_week.beginning_of_week + 2.hour
       user2.sleeps.create!(
-        clock_in: last_week_clock_in,
-        clock_out: last_week_clock_out,
+        start_at: last_week_start_at,
+        end_at: last_week_end_at,
         duration_in_second: 3600
       )
       user1.follow(user2)
@@ -259,9 +272,11 @@ RSpec.describe "/users", type: :request do
       expect(response).to have_http_status(:ok)
 
       data = JSON.parse(response.body)["data"]
-      expect(data[0]["clock_in"]).to eq(last_week_clock_in.strftime("%F %T"))
-      expect(data[0]["clock_out"]).to eq(last_week_clock_out.strftime("%F %T"))
-      expect(data[0]["duration_in_second"]).to eq(last_week_clock_out - last_week_clock_in)
+      expect(data[0]["id"]).not_to eq(nil)
+      expect(data[0]["start_at"]).to eq(last_week_start_at.strftime("%F %T"))
+      expect(data[0]["end_at"]).to eq(last_week_end_at.strftime("%F %T"))
+      expect(data[0]["duration_in_second"]).to eq(last_week_end_at - last_week_start_at)
+      expect(data[0]["user"]["id"]).not_to eq(nil)
       expect(data[0]["user"]["name"]).to eq("John")
     end
 
@@ -270,22 +285,22 @@ RSpec.describe "/users", type: :request do
       
       user_with_shorter_duration = User.create!(name: "John")
 
-      last_week_clock_in1 = Date.today.last_week.beginning_of_week + 30.minute
-      last_week_clock_out1 = Date.today.last_week.beginning_of_week + 1.hour
+      last_week_start_at1 = Date.today.last_week.beginning_of_week + 30.minute
+      last_week_end_at1 = Date.today.last_week.beginning_of_week + 1.hour
       user_with_shorter_duration.sleeps.create!(
-        clock_in: last_week_clock_in1,
-        clock_out: last_week_clock_out1,
-        duration_in_second: (last_week_clock_out1 - last_week_clock_in1)
+        start_at: last_week_start_at1,
+        end_at: last_week_end_at1,
+        duration_in_second: (last_week_end_at1 - last_week_start_at1)
       )
 
       user_with_longer_duration = User.create!(name: "Bob")
 
-      last_week_clock_in2 = Date.today.last_week.beginning_of_week + 1.hour
-      last_week_clock_out2 = Date.today.last_week.beginning_of_week + 2.hour
+      last_week_start_at2 = Date.today.last_week.beginning_of_week + 1.hour
+      last_week_end_at2 = Date.today.last_week.beginning_of_week + 2.hour
       user_with_longer_duration.sleeps.create!(
-        clock_in: last_week_clock_in2,
-        clock_out: last_week_clock_out2,
-        duration_in_second: (last_week_clock_out2 - last_week_clock_in2)
+        start_at: last_week_start_at2,
+        end_at: last_week_end_at2,
+        duration_in_second: (last_week_end_at2 - last_week_start_at2)
       )
       
       user1.follow(user_with_shorter_duration)
@@ -299,8 +314,8 @@ RSpec.describe "/users", type: :request do
 
       expect(data.size).to eq(2)
 
-      expect(data[0]["clock_in"]).to eq(last_week_clock_in2.strftime("%F %T"))
-      expect(data[0]["clock_out"]).to eq(last_week_clock_out2.strftime("%F %T"))
+      expect(data[0]["start_at"]).to eq(last_week_start_at2.strftime("%F %T"))
+      expect(data[0]["end_at"]).to eq(last_week_end_at2.strftime("%F %T"))
       expect(data[0]["duration_in_second"]).to eq(user_with_longer_duration.sleeps[0].duration_in_second)
       expect(data[0]["user"]["name"]).to eq(user_with_longer_duration.name)
     end
@@ -310,17 +325,17 @@ RSpec.describe "/users", type: :request do
       
       user2 = User.create!(name: "John")
       user2.sleeps.create!(
-        clock_in: 2.hour.ago,
-        clock_out: 1.hour.ago,
+        start_at: 2.hour.ago,
+        end_at: 1.hour.ago,
         duration_in_second: 2.hour.ago - 1.hour.ago
       )
 
-      last_week_clock_in = Date.today.last_week.beginning_of_week + 1.hour
-      last_week_clock_out = Date.today.last_week.beginning_of_week + 2.hour
+      last_week_start_at = Date.today.last_week.beginning_of_week + 1.hour
+      last_week_end_at = Date.today.last_week.beginning_of_week + 2.hour
       user2.sleeps.create!(
-        clock_in: last_week_clock_in,
-        clock_out: last_week_clock_out,
-        duration_in_second: last_week_clock_out - last_week_clock_in
+        start_at: last_week_start_at,
+        end_at: last_week_end_at,
+        duration_in_second: last_week_end_at - last_week_start_at
       )
       
       user1.follow(user2)
@@ -333,19 +348,19 @@ RSpec.describe "/users", type: :request do
       
       expect(data.size).to eq(1)
 
-      expect(data[0]["clock_in"]).to eq((last_week_clock_in).strftime("%F %T"))
-      expect(data[0]["clock_out"]).to eq((last_week_clock_out).strftime("%F %T"))
-      expect(data[0]["duration_in_second"]).to eq(last_week_clock_out - last_week_clock_in)
+      expect(data[0]["start_at"]).to eq((last_week_start_at).strftime("%F %T"))
+      expect(data[0]["end_at"]).to eq((last_week_end_at).strftime("%F %T"))
+      expect(data[0]["duration_in_second"]).to eq(last_week_end_at - last_week_start_at)
       expect(data[0]["user"]["name"]).to eq(user2.name)
     end
 
-    it "show sleep without clockout" do
+    it "show sleep without end sleep" do
       user1 = User.create!(name: "Alice")
       user2 = User.create!(name: "John")
 
-      last_week_clock_in = Date.today.last_week.beginning_of_week + 1.hour
+      last_week_start_at = Date.today.last_week.beginning_of_week + 1.hour
       user2.sleeps.create!(
-        clock_in: last_week_clock_in
+        start_at: last_week_start_at
       )
       user1.follow(user2)
 
@@ -354,8 +369,8 @@ RSpec.describe "/users", type: :request do
       expect(response).to have_http_status(:ok)
 
       data = JSON.parse(response.body)["data"]
-      expect(data[0]["clock_in"]).to eq(last_week_clock_in.strftime("%F %T"))
-      expect(data[0]["clock_out"]).to eq(nil)
+      expect(data[0]["start_at"]).to eq(last_week_start_at.strftime("%F %T"))
+      expect(data[0]["end_at"]).to eq(nil)
       expect(data[0]["duration_in_second"]).to eq(nil)
       expect(data[0]["user"]["name"]).to eq("John")
     end
@@ -365,14 +380,14 @@ RSpec.describe "/users", type: :request do
     it "show list of a user's sleep" do
       user1 = User.create!(name: "Alice")
       user1.sleeps.create!(
-        clock_in: "2023-05-20 21:00:00",
-        clock_out: "2023-05-20 21:00:00",
+        start_at: "2023-05-20 21:00:00",
+        end_at: "2023-05-20 21:00:00",
         duration_in_second: 3600,
         created_at: 2.hour.ago
       )
       user1.sleeps.create!(
-        clock_in: "2023-05-21 22:00:00",
-        clock_out: nil,
+        start_at: "2023-05-21 22:00:00",
+        end_at: nil,
         duration_in_second: nil,
         created_at: 1.hour.ago
       )
@@ -382,12 +397,12 @@ RSpec.describe "/users", type: :request do
       expect(response).to have_http_status(:ok)
 
       data = JSON.parse(response.body)["data"]
-      expect(data[0]["clock_in"]).to eq("2023-05-21 22:00:00")
-      expect(data[0]["clock_out"]).to eq(nil)
+      expect(data[0]["start_at"]).to eq("2023-05-21 22:00:00")
+      expect(data[0]["end_at"]).to eq(nil)
       expect(data[0]["duration_in_second"]).to eq(nil)
 
-      expect(data[1]["clock_in"]).to eq("2023-05-20 21:00:00")
-      expect(data[1]["clock_out"]).to eq("2023-05-20 21:00:00")
+      expect(data[1]["start_at"]).to eq("2023-05-20 21:00:00")
+      expect(data[1]["end_at"]).to eq("2023-05-20 21:00:00")
       expect(data[1]["duration_in_second"]).to eq(3600)
     end
   end

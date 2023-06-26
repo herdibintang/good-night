@@ -5,8 +5,12 @@ Good Night is a sleep tracker. Created for interview purpose.
 
 ## Features
 * Create user.
-* Clock in and clock out sleep.
+* Track sleeps.
 * Follow and unfollow other users.
+
+## Improvements
+* Install gem [jb](https://github.com/amatsuda/jb) to render json in separate file from controller, make it more maintainable.
+* Install gem [bullet](https://github.com/flyerhzm/bullet) to use eager loading only when need, makes more performance.
 
 ## Installation Guide
 * Install [Rails](https://rubyonrails.org/)
@@ -22,8 +26,8 @@ Good Night is a sleep tracker. Created for interview purpose.
 | --- | --- | --- |
 | POST | /users | To create a user |
 | GET | /users | To get list of all users |
-| POST | /users/:userId/clock-in | To clock in sleep for a user |
-| POST | /users/:userId/clock-out | To clock out sleep for a user |
+| POST | /users/:userId/sleeps/start | For a user to start sleep |
+| POST | /users/:userId/sleeps/end | For a user to end sleep |
 | GET | /users/:userId/sleeps | To list all user's sleeps |
 | POST | /users/:userId/follow | To follow a user |
 | POST | /users/:userId/unfollow | To unfollow a user |
@@ -64,8 +68,8 @@ Example response:
 }
 ```
 
-### User Clock In
-```POST /users/:userId/clock-in```
+### User Start Sleep
+```POST /users/:userId/sleeps/start```
 Example request:
 ```json
 {
@@ -75,12 +79,18 @@ Example request:
 Example response:
 ```json
 {
-    "message": "Clock in success"
+    "message":"Start sleep success",
+    "data":{
+        "id":1,
+        "start_at":"2023-06-20 21:59:59",
+        "end_at":null,
+        "duration_in_second":null
+    }
 }
 ```
 
-### User Clock Out
-```POST /users/:userId/clock-out```
+### User End Sleep
+```POST /users/:userId/sleeps/end```
 Example request:
 ```json
 {
@@ -90,7 +100,13 @@ Example request:
 Example response:
 ```json
 {
-    "message": "Clock out success"
+    "message":"End sleep success",
+    "data":{
+        "id":1,
+        "start_at":"2023-06-20 20:00:00",
+        "end_at":"2023-06-20 21:00:00",
+        "duration_in_second":3600
+    }
 }
 ```
 
@@ -101,8 +117,8 @@ Example response:
 {
     "data": [
         {
-            "clock_in": "2023-06-08 20:00:00",
-            "clock_out": "2023-06-09 21:00:00",
+            "start_at": "2023-06-08 20:00:00",
+            "end_at": "2023-06-09 21:00:00",
             "duration_in_second": 86400
         }
     ]
@@ -160,10 +176,12 @@ Example response:
 {
     "data": [
         {
-            "clock_in": "2023-06-08 20:00:00",
-            "clock_out": "2023-06-09 21:00:00",
+            "id": 1,
+            "start_at": "2023-06-08 20:00:00",
+            "end_at": "2023-06-09 21:00:00",
             "duration_in_second": 86400,
             "user": {
+                "id": 2,
                 "name": "Bob"
             }
         }
@@ -178,8 +196,9 @@ Example response:
 {
     "data": [
         {
-            "clock_in": "2023-06-08 20:00:00",
-            "clock_out": "2023-06-09 21:00:00",
+            "id": 1,
+            "start_at": "2023-06-08 20:00:00",
+            "end_at": "2023-06-09 21:00:00",
             "duration_in_second": 86400,
             "user": {
                 "name": "Bob"

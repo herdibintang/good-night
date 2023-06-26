@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_11_025225) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_23_055007) do
   create_table "follows", force: :cascade do |t|
     t.integer "from_user_id", null: false
     t.integer "to_user_id", null: false
@@ -22,8 +22,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_11_025225) do
 
   create_table "sleeps", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.datetime "clock_in"
-    t.datetime "clock_out"
+    t.datetime "start_at"
+    t.datetime "end_at"
     t.integer "duration_in_second"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -12,6 +12,6 @@ describe UserStartSleepUseCase do
     )
     
     expect(result.success?).to eq(true)
-    expect(user.sleeps[0].clock_in.strftime("%F %T")).to eq(datetime)
+    expect(user.sleeps[0].start_at.strftime("%F %T")).to eq(datetime)
   end
 end

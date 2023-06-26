@@ -6,26 +6,26 @@ class User < ApplicationRecord
   has_many :followed, foreign_key: :to_user_id, class_name: "Follow"
   has_many :followings, through: :follows, source: :to_user
 
-  def clock_in(time)
+  def start_sleep(time)
     last_sleep = sleeps.last
     
-    if last_sleep.present? && last_sleep.clock_out.nil?
-      errors.add(:base, "Cannot clock in if there is a clock in without clock out")
+    if last_sleep.present? && last_sleep.end_at.nil?
+      errors.add(:base, "Cannot start sleep if there is a start sleep without end sleep")
       return
     end
 
-    sleeps.create!(clock_in: time)
+    sleeps.create!(start_at: time)
   end
 
-  def clock_out(time)
+  def end_sleep(time)
     last_sleep = sleeps.last
     
     if last_sleep.nil?
-      errors.add(:base, "Cannot clock out without previous clock in")
+      errors.add(:base, "Cannot end sleep without previous start sleep")
       return
     end
     
-    last_sleep.update!(clock_out: time)
+    last_sleep.update!(end_at: time)
   end
 
   def follow(user)

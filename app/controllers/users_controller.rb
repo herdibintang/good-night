@@ -11,32 +11,34 @@ class UsersController < ApplicationController
     @users = result.users
   end
 
-  def clock_in
+  def sleeps_start
     result = UserStartSleepUseCase.call(
       user_id: params[:id],
       datetime: params.require(:datetime)
     )
 
-    if result.success?
-      render json: { message: "Clock in success" }
-    elsif result.error[:code] == :not_found
-      render json: { error: result.error[:message] }, status: :not_found
-    else
-      render json: { error: result.error }, status: :unprocessable_entity
+    if result.failure?
+      if result.error[:code] == :not_found
+        render json: { error: result.error[:message] }, status: :not_found
+      else
+        render json: { error: result.error }, status: :unprocessable_entity
+      end
     end
+
+    @sleep = result.sleep
   end
 
-  def clock_out
+  def sleeps_end
     result = UserEndSleepUseCase.call(
       user_id: params[:id],
       datetime: params.require(:datetime)
     )
 
-    if result.success?
-      render json: { message: "Clock out success" }
-    else
+    if result.failure?
       render json: { error: result.error }, status: :unprocessable_entity
     end
+
+    @sleep = result.sleep
   end
 
   def follow

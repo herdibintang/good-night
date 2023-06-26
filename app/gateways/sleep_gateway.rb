@@ -5,8 +5,8 @@ class SleepGateway
     Sleep.where(user_id: user_id).find_each do |sleep|
       results << {
         id: sleep.id,
-        start_at: sleep.clock_in,
-        end_at: sleep.clock_out
+        start_at: sleep.start_at,
+        end_at: sleep.end_at
       }
     end
 
