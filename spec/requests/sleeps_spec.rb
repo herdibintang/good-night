@@ -3,6 +3,32 @@ require 'rails_helper'
 RSpec.describe "/sleeps", type: :request do
   describe "GET /index" do
     it "can show all sleeps data" do
+      dbl = double
+      sleep1 = double(
+        id: 1,
+        start_at: "2023-05-21 23:00:00".to_datetime,
+        end_at: nil,
+        duration_in_second: nil,
+        user: double(
+          name: "Bob"
+        )
+      )
+      sleep2 = double(
+        id: 2,
+        start_at: "2023-05-20 20:00:00".to_datetime,
+        end_at: "2023-05-20 21:00:00".to_datetime,
+        duration_in_second: 3600,
+        user: double(
+          name: "Alice"
+        )
+      )
+
+      allow(dbl).to receive(:sleeps).and_return([
+        sleep1,
+        sleep2
+      ])
+      allow(ViewSleepsUseCase).to receive(:call).and_return(dbl)
+
       user1 = User.create!(name: "Alice")
       user1.sleeps.create!(
         start_at: "2023-05-20 20:00:00",
