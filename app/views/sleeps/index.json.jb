@@ -1,12 +1,12 @@
 {
   data: @sleeps.map do |sleep|
     {
-      id: sleep.id,
-      start_at: sleep.start_at.strftime("%F %T"),
-      end_at: sleep.end_at.try(:strftime, "%F %T"),
-      duration_in_second: sleep.duration_in_second,
+      id: sleep[:id],
+      start_at: sleep[:start_at].strftime("%F %T"),
+      end_at: sleep[:end_at].try(:strftime, "%F %T"),
+      duration_in_second: sleep[:duration_in_second],
       user: {
-        name: sleep.user.name
+        name: sleep[:user][:name]
       }
     }
   end
