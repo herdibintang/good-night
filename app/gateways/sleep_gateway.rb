@@ -12,4 +12,20 @@ class SleepGateway
 
     results
   end
+
+  def self.find_all()
+    results = []
+    
+    Sleep.order(created_at: :desc).all.each do |sleep|
+      results << {
+        id: sleep.id,
+        user_id: sleep.user_id,
+        start_at: sleep.start_at,
+        end_at: sleep.end_at,
+        duration_in_second: sleep.duration_in_second
+      }
+    end
+
+    results
+  end
 end

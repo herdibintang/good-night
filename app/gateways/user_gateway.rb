@@ -3,6 +3,10 @@ class UserGateway
     User.find_by(id: id)
   end
 
+  def self.find_by_ids(id)
+    User.where(id: id)
+  end
+
   def self.create(*args)
     User.create(args)[0]
   end
