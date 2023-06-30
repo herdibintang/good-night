@@ -38,6 +38,7 @@ gem "bootsnap", require: false
 
 gem "jb"
 gem "interactor", "~> 3.0"
+gem 'simplecov', require: false, group: :test
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
