@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "POST /users/create", type: :request do
+RSpec.describe "POST /users", type: :request do
   it "can create user" do
     params = {
       name: "Alice"

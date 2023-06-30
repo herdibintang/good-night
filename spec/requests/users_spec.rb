@@ -1,23 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "/users", type: :request do
-  describe "POST /index" do
-    it "show user list" do
-      User.create!(name: "Alice")
-
-      get "/users", as: :json
-
-      expect(response).to have_http_status(:ok)
-
-      body = JSON.parse(response.body)
-      
-      expect(body["data"][0]["id"]).not_to eq(nil)
-      expect(body["data"][0]["name"]).to eq("Alice")
-      expect(body["data"][0]["created_at"]).to eq(nil)
-      expect(body["data"][0]["updated_at"]).to eq(nil)
-    end
-  end
-
   describe "POST /sleeps/start" do
     it "can start sleep" do
       user = User.create!(name: "Alice")
