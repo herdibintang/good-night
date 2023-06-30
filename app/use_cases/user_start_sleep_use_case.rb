@@ -16,14 +16,14 @@ class UserStartSleepUseCase
 
     user_entity.start_sleep(context.datetime)
 
-    test = nil
+    changed_sleep = nil
 
     user_entity.sleeps.each do |sleep|
       if sleep.changed?
-        test = Sleep.create!(user_id: context.user_id, start_at: sleep.start_at)
+        changed_sleep = Sleep.create!(user_id: context.user_id, start_at: sleep.start_at)
       end
     end
 
-    context.sleep = test
+    context.sleep = changed_sleep
   end
 end
