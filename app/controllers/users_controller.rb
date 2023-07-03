@@ -46,12 +46,10 @@ class UsersController < ApplicationController
   end
 
   def follow
-    result = UserFollowAnotherUserUseCase.call(
+    UserFollowAnotherUserUseCase.call(
       user_id: params[:id],
       follow_user_id: params.require(:user_id)
     )
-
-    render json: { message: "Follow success" }
   end
 
   def unfollow
@@ -63,8 +61,6 @@ class UsersController < ApplicationController
     if result.failure?
       return render json: { error: "Not following this user" }, status: :conflict
     end
-
-    render json: { message: "Unfollow success" }
   end
 
   def followings_sleeps
