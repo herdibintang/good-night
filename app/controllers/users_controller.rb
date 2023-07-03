@@ -11,6 +11,10 @@ class UsersController < ApplicationController
     @users = result.users
   end
 
+  def destroy
+    User.destroy(params[:id])
+  end
+
   def sleeps_start
     result = UserStartSleepUseCase.call(
       user_id: params[:id],
