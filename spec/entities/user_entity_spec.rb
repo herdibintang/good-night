@@ -62,4 +62,23 @@ describe UserEntity do
       expect(user1.unfollow(user2)).to eq(false)
     end
   end
+
+  it 'can add sleep from hash' do
+    sleep_hash = {
+      id: 1,
+      start_at: "2023-06-20 20:00:00",
+      end_at: "2023-06-20 21:00:00",
+      duration_in_second: 3600
+    }
+
+    user = UserEntity.new
+    user.add_sleep_from_hash(sleep_hash)
+
+    sleep = SleepEntity.new
+    sleep.id = sleep_hash[:id]
+    sleep.start_at = sleep_hash[:start_at]
+    sleep.end_at = sleep_hash[:end_at]
+
+    expect(user.sleeps[0].eq?(sleep)).to eq(true)
+  end
 end

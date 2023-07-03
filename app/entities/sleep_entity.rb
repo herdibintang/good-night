@@ -33,4 +33,8 @@ class SleepEntity
       errors.add(:sleep, "invalid")
     end
   end
+
+  def eq?(another_sleep)
+    start_at == another_sleep.start_at && end_at == another_sleep.end_at
+  end
 end

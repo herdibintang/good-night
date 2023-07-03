@@ -44,6 +44,15 @@ class UserEntity
     true
   end
 
+  def add_sleep_from_hash(hash)
+    sleep = SleepEntity.new
+    sleep.id = hash[:id]
+    sleep.start_at = hash[:start_at]
+    sleep.end_at = hash[:end_at]
+
+    @sleeps << sleep
+  end
+
   private
   def sleeps_valid
     if @sleeps.any? { |sleep| !sleep.valid? }
