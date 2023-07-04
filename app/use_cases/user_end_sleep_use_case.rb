@@ -20,12 +20,18 @@ class UserEndSleepUseCase
 
     user_entity.sleeps.each do |sleep|
       if sleep.changed?
-        test = Sleep.find(sleep.id)
-        test2 = test
-        test2.update!(end_at: sleep.end_at)
+        test = update_sleep(sleep)
       end
     end
 
     context.sleep = test
+  end
+
+  private
+  def update_sleep(sleep)
+    test = Sleep.find(sleep.id)
+    test.update!(end_at: sleep.end_at)
+
+    test
   end
 end
