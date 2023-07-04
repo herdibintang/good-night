@@ -24,7 +24,12 @@ class UserEndSleepUseCase
       end
     end
 
-    context.sleep = test
+    context.sleep = {
+      id: test.id,
+      start_at: test.start_at,
+      end_at: test.end_at,
+      duration_in_second: test.duration_in_second
+    }
   end
 
   private
