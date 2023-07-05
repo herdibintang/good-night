@@ -82,6 +82,39 @@ describe UserEntity do
     expect(user.sleeps[0].eq?(sleep)).to eq(true)
   end
 
+  it 'can add sleeps from hashes' do
+    sleep_hashes = [
+      {
+        id: 1,
+        start_at: "2023-06-20 20:00:00",
+        end_at: "2023-06-20 21:00:00",
+        duration_in_second: 3600
+      },
+      {
+        id: 2,
+        start_at: "2023-06-20 20:00:00",
+        end_at: nil,
+        duration_in_second: nil
+      }
+    ]
+
+    user = UserEntity.new
+    user.add_sleeps_from_hashes(sleep_hashes)
+
+    sleep1 = SleepEntity.new
+    sleep1.id = sleep_hashes[0][:id]
+    sleep1.start_at = sleep_hashes[0][:start_at]
+    sleep1.end_at = sleep_hashes[0][:end_at]
+
+    sleep2 = SleepEntity.new
+    sleep2.id = sleep_hashes[1][:id]
+    sleep2.start_at = sleep_hashes[1][:start_at]
+    sleep2.end_at = sleep_hashes[1][:end_at]
+
+    expect(user.sleeps[0].eq?(sleep1)).to eq(true)
+    expect(user.sleeps[1].eq?(sleep2)).to eq(true)
+  end
+
   it 'can show ongoing sleep' do
     sleep_hash = {
       id: 1,

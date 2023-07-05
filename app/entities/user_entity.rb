@@ -46,6 +46,12 @@ class UserEntity
     true
   end
 
+  def add_sleeps_from_hashes(hashes)
+    hashes.each { |hash|
+      add_sleep_from_hash(hash)
+    }
+  end
+
   def add_sleep_from_hash(hash)
     sleep = SleepEntity.new
     sleep.id = hash[:id]
