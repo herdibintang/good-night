@@ -15,7 +15,14 @@ class SleepEntity
 
   def start_at=(value)
     start_at_will_change!
-    @start_at = value.nil? ? nil : DateTime.parse(value)
+
+    if value.nil?
+      @start_at = nil
+    elsif value.class == DateTime
+      @start_at = value
+    else
+      @start_at = DateTime.parse(value)
+    end
   end
 
   def end_at=(value)
