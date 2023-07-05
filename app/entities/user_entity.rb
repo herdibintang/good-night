@@ -53,6 +53,10 @@ class UserEntity
     @sleeps << sleep
   end
 
+  def ongoing_sleep
+    @sleeps.find { |h| h.ongoing? }
+  end
+
   private
   def sleeps_valid
     if @sleeps.any? { |sleep| !sleep.valid? }

@@ -81,4 +81,23 @@ describe UserEntity do
 
     expect(user.sleeps[0].eq?(sleep)).to eq(true)
   end
+
+  it 'can show ongoing sleep' do
+    sleep_hash = {
+      id: 1,
+      start_at: "2023-06-20 20:00:00",
+      end_at: nil,
+      duration_in_second: nil
+    }
+
+    user = UserEntity.new
+    user.add_sleep_from_hash(sleep_hash)
+
+    sleep = SleepEntity.new
+    sleep.id = sleep_hash[:id]
+    sleep.start_at = sleep_hash[:start_at]
+    sleep.end_at = sleep_hash[:end_at]
+
+    expect(user.ongoing_sleep.eq?(sleep)).to eq(true)
+  end
 end
