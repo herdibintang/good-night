@@ -28,4 +28,12 @@ class SleepGateway
 
     results
   end
+
+  def self.update(sleep)
+    Sleep.where(id: sleep[:id]).update(
+      start_at: sleep[:start_at],
+      end_at: sleep[:end_at],
+      duration_in_second: sleep[:duration_in_second],
+    )
+  end
 end
