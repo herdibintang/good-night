@@ -6,9 +6,9 @@ class UserEndSleepUseCase
   def call
     user_entity = UserEntity.new
     
-    SleepGateway.find_all_by_user_id(context.user_id).each do |sleep|
-      user_entity.add_sleep_from_hash(sleep)
-    end
+    sleeps = SleepGateway.find_all_by_user_id(context.user_id)
+
+    user_entity.add_sleeps_from_hashes(sleeps)
     
     sleep = user_entity.end_sleep(context.datetime)
 
