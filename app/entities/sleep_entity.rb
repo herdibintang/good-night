@@ -27,7 +27,14 @@ class SleepEntity
 
   def end_at=(value)
     end_at_will_change!
-    @end_at = value.nil? ? nil : DateTime.parse(value)
+
+    if value.nil?
+      @end_at = nil
+    elsif value.class == DateTime
+      @end_at = value
+    else
+      @end_at = DateTime.parse(value)
+    end
 
     if @end_at.present? && @start_at.present?
       @duration_in_second = ((@end_at - @start_at.to_datetime) * 24 * 60 * 60).to_i

@@ -11,7 +11,7 @@ describe SleepEntity do
   end
 
   it 'can end' do
-    datetime = "2023-06-20 21:00:00"
+    datetime = DateTime.parse("2023-06-20 21:00:00")
 
     sleep_entity = SleepEntity.new
     sleep_entity.start_at = "2023-06-20 20:00:00"
