@@ -1,3 +1,6 @@
+require 'active_model'
+require_relative './sleep_entity'
+
 class UserEntity
   include ActiveModel::Validations
 

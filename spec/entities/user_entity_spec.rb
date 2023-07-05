@@ -1,17 +1,20 @@
-require 'rails_helper'
+require 'spec_helper'
+require_relative '../../app/entities/user_entity'
 
 describe UserEntity do
   context 'start sleep' do
     it 'can start sleep' do
+      time = "2023-06-20 21:00:00"
+
       user = UserEntity.new
       user.start_sleep("2023-06-20 21:00:00")
       
-      expect(user.sleeps[0].start_at).to eq("2023-06-20 21:00:00")
+      expect(user.sleeps[0].start_at).to eq(DateTime.parse("2023-06-20 21:00:00"))
     end
   end
 
   context 'end sleep' do
-    it 'can end sleep' do
+    it 'can end sleep', :aggregate_failures do
       datetime_start = "2023-06-20 21:00:00"
       datetime_end = "2023-06-20 22:00:00"
 
@@ -19,8 +22,8 @@ describe UserEntity do
       user.start_sleep(datetime_start)
       user.end_sleep(datetime_end)
       
-      expect(user.sleeps[0].start_at).to eq(datetime_start)
-      expect(user.sleeps[0].end_at).to eq(datetime_end)
+      expect(user.sleeps[0].start_at).to eq(DateTime.parse(datetime_start))
+      expect(user.sleeps[0].end_at).to eq(DateTime.parse(datetime_end))
     end
 
     it 'cannot end sleep if there is no ongoing sleep' do
