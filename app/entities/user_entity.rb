@@ -18,7 +18,7 @@ class UserEntity
   end
 
   def end_sleep(datetime)
-    sleep = @sleeps.find { |h| h.ongoing? }
+    sleep = ongoing_sleep()
 
     if sleep.nil?
       sleep = SleepEntity.new
