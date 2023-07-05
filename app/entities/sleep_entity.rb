@@ -1,3 +1,5 @@
+require 'active_model'
+
 class SleepEntity
   include ActiveModel::Validations
   include ActiveModel::Dirty

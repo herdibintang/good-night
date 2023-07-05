@@ -1,4 +1,6 @@
-require 'rails_helper'
+require 'spec_helper'
+
+require_relative '../../app/entities/sleep_entity'
 
 describe SleepEntity do
   it 'can start' do
