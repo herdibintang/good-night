@@ -16,16 +16,9 @@ class UserEndSleepUseCase
       context.fail!(error: user_entity.errors.full_messages.to_sentence)
     end
 
-    sleep_hash = {
-      id: sleep.id,
-      start_at: sleep.start_at,
-      end_at: sleep.end_at,
-      duration_in_second: sleep.duration_in_second
-    }
+    SleepGateway.update(sleep.to_hash)
 
-    SleepGateway.update(sleep_hash)
-
-    context.sleep = sleep_hash
+    context.sleep = sleep.to_hash
   end
 
   private

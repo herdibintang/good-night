@@ -58,4 +58,13 @@ class SleepEntity
   def eq?(another_sleep)
     start_at == another_sleep.start_at && end_at == another_sleep.end_at
   end
+
+  def to_hash
+    {
+      id: @id,
+      start_at: @start_at,
+      end_at: @end_at,
+      duration_in_second: @duration_in_second,
+    }
+  end
 end

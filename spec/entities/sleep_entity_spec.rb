@@ -51,4 +51,23 @@ describe SleepEntity do
     expect(sleep_entity.valid?).to eq(false)
     expect(sleep_entity.errors.full_messages).to include("End at cannot be before start at")
   end
+
+  it 'can be converted to hash' do
+    id = 1
+    start_at = DateTime.parse("2023-06-20 20:00:00")
+    end_at = DateTime.parse("2023-06-20 21:00:00")
+    duration_in_second = 3600
+
+    sleep = SleepEntity.new
+    sleep.id = id
+    sleep.start_at = start_at
+    sleep.end_at = end_at
+
+    hash = sleep.to_hash()
+
+    expect(hash[:id]).to eq(id)
+    expect(hash[:start_at]).to eq(start_at)
+    expect(hash[:end_at]).to eq(end_at)
+    expect(hash[:duration_in_second]).to eq(duration_in_second)
+  end
 end
