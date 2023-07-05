@@ -28,6 +28,8 @@ class UserEntity
     else
       sleep.end_at = datetime
     end
+
+    sleep
   end
 
   def follow(user)

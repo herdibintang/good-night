@@ -3,6 +3,7 @@ class SleepEntity
   include ActiveModel::Dirty
   
   attr_accessor :id, :start_at, :end_at
+  attr_reader :duration_in_second
   define_attribute_methods :start_at, :end_at
 
   validate :end_at_cannot_be_before_start_at
@@ -14,12 +15,16 @@ class SleepEntity
 
   def start_at=(value)
     start_at_will_change!
-    @start_at = value
+    @start_at = value.nil? ? nil : DateTime.parse(value)
   end
 
   def end_at=(value)
     end_at_will_change!
-    @end_at = value
+    @end_at = value.nil? ? nil : DateTime.parse(value)
+
+    if @end_at.present? && @start_at.present?
+      @duration_in_second = ((@end_at - @start_at.to_datetime) * 24 * 60 * 60).to_i
+    end
   end
 
   def end_at_cannot_be_before_start_at

@@ -10,25 +10,19 @@ class UserEndSleepUseCase
       user_entity.add_sleep_from_hash(sleep)
     end
     
-    user_entity.end_sleep(context.datetime)
+    sleep = user_entity.end_sleep(context.datetime)
 
     unless user_entity.valid?
       context.fail!(error: user_entity.errors.full_messages.to_sentence)
     end
 
-    test = nil
-
-    user_entity.sleeps.each do |sleep|
-      if sleep.changed?
-        test = update_sleep(sleep)
-      end
-    end
+    update_sleep(sleep)
 
     context.sleep = {
-      id: test.id,
-      start_at: test.start_at,
-      end_at: test.end_at,
-      duration_in_second: test.duration_in_second
+      id: sleep.id,
+      start_at: sleep.start_at,
+      end_at: sleep.end_at,
+      duration_in_second: sleep.duration_in_second
     }
   end
 
