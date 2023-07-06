@@ -1,4 +1,5 @@
 require "interactor"
+require_relative "../entities/user_entity"
 
 class UserEndSleepUseCase
   include Interactor

@@ -1,5 +1,4 @@
 require 'spec_helper'
-
 require_relative '../../app/entities/sleep_entity'
 
 describe SleepEntity do

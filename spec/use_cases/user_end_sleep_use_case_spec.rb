@@ -1,4 +1,5 @@
-require 'rails_helper'
+require 'spec_helper'
+require_relative '../../app/use_cases/user_end_sleep_use_case'
 
 describe UserEndSleepUseCase do
   it 'success' do
