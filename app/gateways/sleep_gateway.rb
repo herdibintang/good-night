@@ -6,7 +6,8 @@ class SleepGateway
       results << {
         id: sleep.id,
         start_at: sleep.start_at.strftime("%F %T"),
-        end_at: sleep.end_at.try(:strftime, "%F %T")
+        end_at: sleep.end_at.try(:strftime, "%F %T"),
+        duration_in_second: sleep.duration_in_second
       }
     end
 
