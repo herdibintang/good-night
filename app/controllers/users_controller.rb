@@ -34,6 +34,7 @@ class UsersController < ApplicationController
 
   def sleeps_end
     result = UserEndSleepUseCase.call(
+      sleep_gateway: SleepGateway,
       user_id: params[:id],
       datetime: params.require(:datetime)
     )

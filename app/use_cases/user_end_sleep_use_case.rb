@@ -6,7 +6,7 @@ class UserEndSleepUseCase
   def call
     user_entity = UserEntity.new
     
-    sleeps = SleepGateway.find_all_by_user_id(context.user_id)
+    sleeps = context.sleep_gateway.find_all_by_user_id(context.user_id)
 
     user_entity.add_sleeps_from_hashes(sleeps)
     
@@ -16,7 +16,7 @@ class UserEndSleepUseCase
       context.fail!(error: user_entity.errors.full_messages.to_sentence)
     end
 
-    SleepGateway.update(sleep.to_hash)
+    context.sleep_gateway.update(sleep.to_hash)
 
     context.sleep = sleep.to_hash
   end

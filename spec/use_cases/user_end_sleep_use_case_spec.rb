@@ -20,6 +20,7 @@ describe UserEndSleepUseCase do
     datetime = "2023-06-20 21:59:59"
 
     result = UserEndSleepUseCase.call(
+      sleep_gateway: SleepGateway,
       user_id: user.id,
       datetime: datetime
     )
@@ -45,6 +46,7 @@ describe UserEndSleepUseCase do
     datetime = "2023-06-10 21:59:59"
 
     result = UserEndSleepUseCase.call(
+      sleep_gateway: SleepGateway,
       user_id: user.id,
       datetime: datetime
     )
